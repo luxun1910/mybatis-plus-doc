@@ -63,11 +63,11 @@ export default defineConfig({
           label: "简体中文",
           lang: "zh-CN",
         },
-        'en': {
+        en: {
           label: 'English',
           lang: 'en',
         },
-        'ja': {
+        ja: {
           label: '日本語',
           lang: 'ja',
         }

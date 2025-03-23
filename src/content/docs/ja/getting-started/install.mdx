@@ -6,13 +6,13 @@ sidebar:
 
 import LastedDependency from '@/components/LastedDependency.astro';
 
-全新的 `MyBatis-Plus` 3.0 版本基于 JDK8，提供了 `lambda` 形式的调用，所以安装集成 MP3.0 要求如下：
+新しい MyBatis-Plus 3.0 バージョンは JDK8 を基盤としており、`lambda` 形式での呼び出しをサポートしています。そのため、MyBatis-Plus 3.0 を導入・統合する際の要件は以下の通りです：
 
 - JDK 8+
 - Maven or Gradle
 
 :::caution[注意事项]
-版本 `3.5.9+`  插件部分开始修改为可选依赖，具体查看下文 `maven bom` 部分，根据自行项目选取对应插件支持模块。
+バージョン `3.5.9` 以降では、プラグインは Optional な依存関係として提供されています。詳細は下記の `maven bom` セクションをご確認の上、プロジェクトに応じて対応するプラグインモジュールを選択してください。
 :::
 
 ## Release
@@ -37,9 +37,9 @@ import LastedDependency from '@/components/LastedDependency.astro';
 
 :::caution[注意事项]
 
-引入 `MyBatis-Plus` 之后请不要再次引入 `MyBatis` 以及 `mybatis-spring-boot-starter`和`MyBatis-Spring`，以避免因版本差异导致的问题。
+`MyBatis-Plus` を導入した後は、`MyBatis`、`mybatis-spring-boot-starter`、`MyBatis-Spring`を併せて導入しないでください。バージョンの違いによって不具合が発生する可能性があります。
 
-自**3.5.4**开始，在没有使用`mybatis-plus-boot-starter`或`mybatis-plus-spring-boot3-starter`情况下，请自行根据项目情况引入`mybatis-spring`。
+バージョン**3.5.4**より、`mybatis-plus-boot-starter` または `mybatis-plus-spring-boot3-starter` を使用していない場合、プロジェクトの状況に応じて、手動で `mybatis-spring` を導入してください。
 
 :::
 
@@ -49,7 +49,7 @@ import LastedDependency from '@/components/LastedDependency.astro';
 
 :::caution[注意事项]
 
-自3.5.11-SNAPSHOTS开始，中央快照仓库地址变更为 https://central.sonatype.com/repository/maven-snapshots/ ，版本有效期为90天。
+3.5.11-SNAPSHOTS より、セントラルスナップショットリポジトリのアドレスは https://central.sonatype.com/repository/maven-snapshots/ に変更されました。バージョンの有効期限は90日間です。
 
 :::
 
@@ -62,7 +62,7 @@ Maven：
 </repository>
 ```
 
-当使用代理仓库无法下载快照时，请在 mirrorOf 中加上 `  !snapshots`。
+プロキシリポジトリ経由でスナップショットがダウンロードできない場合は、请在 mirrorOf に `  !snapshots` を追加してください。
 
 ```xml
 <mirror>

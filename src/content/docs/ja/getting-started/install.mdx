@@ -1,0 +1,155 @@
+---
+title: 安装
+sidebar:
+  order: 2
+---
+
+import LastedDependency from '@/components/LastedDependency.astro';
+
+全新的 `MyBatis-Plus` 3.0 版本基于 JDK8，提供了 `lambda` 形式的调用，所以安装集成 MP3.0 要求如下：
+
+- JDK 8+
+- Maven or Gradle
+
+:::caution[注意事项]
+版本 `3.5.9+`  插件部分开始修改为可选依赖，具体查看下文 `maven bom` 部分，根据自行项目选取对应插件支持模块。
+:::
+
+## Release
+
+### Spring Boot2
+
+<LastedDependency groupId="com.baomidou" artifactId="mybatis-plus-boot-starter" />
+
+### Spring Boot3
+
+<LastedDependency groupId="com.baomidou" artifactId="mybatis-plus-spring-boot3-starter" />
+
+### Spring
+
+<LastedDependency groupId="com.baomidou" artifactId="mybatis-plus" />
+
+### Solon
+
+<LastedDependency groupId="com.baomidou" artifactId="mybatis-plus-solon-plugin" />
+
+---
+
+:::caution[注意事项]
+
+引入 `MyBatis-Plus` 之后请不要再次引入 `MyBatis` 以及 `mybatis-spring-boot-starter`和`MyBatis-Spring`，以避免因版本差异导致的问题。
+
+自**3.5.4**开始，在没有使用`mybatis-plus-boot-starter`或`mybatis-plus-spring-boot3-starter`情况下，请自行根据项目情况引入`mybatis-spring`。
+
+:::
+
+## Snapshot
+
+快照 SNAPSHOT 版本需要添加仓库，且版本号为快照版本 [点击查看最新快照版本号](https://oss.sonatype.org/content/repositories/snapshots/com/baomidou/mybatis-plus-boot-starter/)。
+
+:::caution[注意事项]
+
+自3.5.11-SNAPSHOTS开始，中央快照仓库地址变更为 https://central.sonatype.com/repository/maven-snapshots/ ，版本有效期为90天。
+
+:::
+
+Maven：
+
+```xml
+<repository>
+    <id>snapshots</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+</repository>
+```
+
+当使用代理仓库无法下载快照时，请在 mirrorOf 中加上 `  !snapshots`。
+
+```xml
+<mirror>
+  <id>aliyunmaven</id>
+  <mirrorOf>*,!snapshots</mirrorOf>
+  <name>阿里云公共仓库</name>
+  <url>https://maven.aliyun.com/repository/public</url>
+</mirror>
+```
+
+Gradle：
+
+```groovy
+repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+}
+```
+
+## Maven bom
+
+>  使用 `maven bom` 管理依赖，减少版本号的冲突。因为 `jsqlparser 5.0+` 版本不再支持 `jdk8` 针对这个问题解耦 `jsqlparser` 依赖。
+>  正确打开姿势，引入 `mybatis-plus-bom` 模块，然后引入 `..starter` 和 `..jsqlparser..` 依赖
+>
+>  mybatis-plus-jsqlparser:  此依赖会跟着jsqlparser最新版本支持更新
+>
+>  mybatis-plus-jsqlparser-xx: 为具体的jsqlparser特定支持版本，也就是无法兼容更新的板本。
+
+- Maven
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-bom</artifactId>
+            <version>3.5.9+ 版本</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<!-- spring boot3 引入可选模块 -->
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+</dependency>
+
+<!-- jdk 11+ 引入可选模块 -->
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-jsqlparser</artifactId>
+</dependency>
+
+<!-- spring boot2 引入可选模块 -->
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-boot-starter</artifactId>
+</dependency>
+
+<!-- jdk 8+ 引入可选模块 -->
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
+</dependency>
+```
+
+
+- Gradle
+
+```groovy
+// 依赖管理
+dependencyManagement {
+    imports {
+        mavenBom "com.baomidou:mybatis-plus-bom:3.5.9+ 版本"
+    }
+}
+
+// spring boot3 引入可选模块
+implementation("com.baomidou:mybatis-plus-spring-boot3-starter")
+
+// jdk 11+ 引入可选模块
+implementation("com.baomidou:mybatis-plus-jsqlparser")
+
+// spring boot2 引入可选模块
+implementation("com.baomidou:mybatis-plus-boot-starter")
+
+// jdk 8+ 引入可选模块
+implementation("com.baomidou:mybatis-plus-jsqlparser-4.9")
+```

@@ -9,6 +9,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "MyBatis-Plus",
+      defaultLocale: 'root',
       logo: {
         src: "./src/assets/logo.svg",
       },
@@ -61,6 +62,14 @@ export default defineConfig({
         root: {
           label: "简体中文",
           lang: "zh-CN",
+        },
+        'en': {
+          label: 'English',
+          lang: 'en',
+        },
+        'ja': {
+          label: '日本語',
+          lang: 'ja',
         }
       },
       editLink: {

@@ -1,18 +1,18 @@
 ---
-title: 配置
+title: 設定
 sidebar:
   order: 3
 ---
 
-集成 MyBatis-Plus 非常的简单，我们仅需要一些简单的配置即可使用 MyBatis-Plus 的强大功能！
+MyBatis-Plus は簡単に組み込むことができ、わずかな設定だけでその強力な機能をすぐに利用できます！
 
 :::tip
-在讲解配置之前，请确保您已经安装了 MyBatis-Plus，如果您尚未安装，请查看 [安装](/getting-started/install) 一章。
+設定について説明する前に、MyBatis-Plus がインストールされていることを確認してください。まだインストールされていない場合は、[インストール](/getting-started/install) の章をご覧ください。
 :::
 
-## Spring Boot 工程
+## Spring Boot プロジェクト
 
-- 配置 MapperScan 注解
+- MapperScan アノテーションを設定します
 
   ```java {2}
   @SpringBootApplication
@@ -28,7 +28,7 @@ sidebar:
 
 ## Spring 工程
 
-- 配置 MapperScan
+- MapperScan を設定します
 
   ```xml {2}
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
@@ -36,7 +36,7 @@ sidebar:
   </bean>
   ```
 
-- 调整 SqlSessionFactory 为 MyBatis-Plus 的 SqlSessionFactory
+- SqlSessionFactory を MyBatis-Plus の SqlSessionFactory に切り替える
 
   ```xml {1}
   <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
@@ -44,8 +44,8 @@ sidebar:
   </bean>
   ```
 
-通常来说，一般的简单工程，通过以上配置即可正常使用 MyBatis-Plus，具体可参考以下项目：[Spring Boot 快速启动示例](https://github.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-quickstart)、[Spring MVC 快速启动示例](https://github.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-quickstart-springmvc)。
+通常、一般的でシンプルなプロジェクトであれば、上記の設定だけで MyBatis-Plus を問題なく利用できます。具体的には、以下のプロジェクトを参考にしてください：[Spring Boot 快速启动示例](https://github.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-quickstart)、[Spring MVC 快速启动示例](https://github.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-quickstart-springmvc)。
 
-同时 MyBatis-Plus 提供了大量的个性化配置来满足不同复杂度的工程，大家可根据自己的项目按需取用，详细配置请参考[使用配置](/reference/)一文。
+また、MyBatis-Plus では、さまざまな複雑さのプロジェクトに対応できるよう、豊富なカスタマイズ設定を提供しています。プロジェクトの要件に応じて、必要な設定を柔軟に利用できます。詳しい設定内容については、[リファレンス](/reference/)をご参照ください。
 
-针对复杂的表结构，我们也提供了丰富的字段注解以满足大家的特殊需求，详情请参考[注解](/reference/annotation/)一文。
+複雑なテーブル構造に対応するため、特別な要件に応じた豊富なフィールドアノテーションも提供しています。詳細については、[アノテーション](/reference/annotation/)をご参照ください。

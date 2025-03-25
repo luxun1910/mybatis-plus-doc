@@ -11,9 +11,9 @@ sidebar:
 
 ```java
 public class User {
-    private String name; // 名字
-    private AgeEnum age; // 年龄
-    private GradeEnum grade; // 年级
+    private String name; // 名前
+    private AgeEnum age; // 年齢
+    private GradeEnum grade; // 学年
 }
 ```
 

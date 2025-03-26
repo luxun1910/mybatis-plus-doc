@@ -1,5 +1,5 @@
 ---
-title: 逻辑删除支持
+title: 論理削除のサポート
 sidebar:
   order: 13
 ---

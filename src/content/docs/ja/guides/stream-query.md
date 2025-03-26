@@ -1,5 +1,5 @@
 ---
-title: 流式查询
+title: ストリームクエリ
 sidebar:
   order: 5
 ---

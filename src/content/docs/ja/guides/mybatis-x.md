@@ -1,5 +1,5 @@
 ---
-title: Mybatis X 插件
+title: Mybatis X プラグイン
 sidebar:
   order: 20
 ---

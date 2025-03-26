@@ -1,5 +1,5 @@
 ---
-title: 自动映射枚举
+title: 列挙型の自動マッピング
 sidebar:
   order: 8
 ---

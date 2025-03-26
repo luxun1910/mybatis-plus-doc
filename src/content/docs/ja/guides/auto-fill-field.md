@@ -53,6 +53,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     }
 }
 ```
+
 ```kotlin
 // kotlin example
 @Component
@@ -75,6 +76,7 @@ class MyMetaObjectHandler : MetaObjectHandler {
 
 }
 ```
+
 ### 3. 配置自动填充处理器
 
 确保你的 `MyMetaObjectHandler` 类被 Spring 管理，可以通过 `@Component` 或 `@Bean` 注解来实现。

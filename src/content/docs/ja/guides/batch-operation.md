@@ -178,6 +178,7 @@ transactionTemplate.execute((TransactionCallback<List<BatchResult>>) status -> {
     throw new RuntimeException("出错了");
 });
 ```
+
 ### SQL LOAD csv
 
 > 如果对导入表有更高的性能要求，可以采用执行 `SQL LOAD csv` 的方式，如下为 `MySQL` 的示例：

@@ -83,12 +83,12 @@ repositories {
 
 ## Maven bom
 
->  使用 `maven bom` 管理依赖，减少版本号的冲突。因为 `jsqlparser 5.0+` 版本不再支持 `jdk8` 针对这个问题解耦 `jsqlparser` 依赖。
->  正确打开姿势，引入 `mybatis-plus-bom` 模块，然后引入 `..starter` 和 `..jsqlparser..` 依赖
+>  `maven bom` を使用して依存関係を管理し、バージョン番号の競合を減らします。`jsqlparser 5.0+` バージョンは `jdk8` をサポートしなくなったので、この問題に対応するために `jsqlparser` の依存関係を疎結合化しています。
+>  正しい導入方法は、`mybatis-plus-bom` モジュールを導入し、`..starter` および `..jsqlparser..` 依存関係を導入することです。
 >
->  mybatis-plus-jsqlparser:  此依赖会跟着jsqlparser最新版本支持更新
+>  mybatis-plus-jsqlparser:  この依存関係は、JSQLParser の最新バージョンに対応して随時更新されます。
 >
->  mybatis-plus-jsqlparser-xx: 为具体的jsqlparser特定支持版本，也就是无法兼容更新的板本。
+>  mybatis-plus-jsqlparser-xx: 特定バージョンの JSQLParser に対応したものです。つまり、より新しいバージョンとは互換性がありません。
 
 - Maven
 

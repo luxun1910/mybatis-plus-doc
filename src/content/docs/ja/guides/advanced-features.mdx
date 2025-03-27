@@ -21,14 +21,14 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
 ## データ監査（照合）
 
 - 使用例：👉 [mybatis-mate-audit](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-audit)
-- 对比两对象属性差异，例如：银行流水对账。
+- 2つのオブジェクトのプロパティの差異を比較します。例：銀行の取引明細の照合作業。
   ```java
   // 1，异步回调，注意 @EnableAsync 开启异步
   applicationEventPublisher.publishEvent(new DataAuditEvent((t) -> {
       List<Change> changes = t.apply(newVersion, oldVersion);
       for (Change valueChange : changes) {
           ValueChange change = (ValueChange) valueChange;
-          System.err.println(String.format("%s不匹配，期望值 %s 实际值 %s", change.getPropertyName(), change.getLeft(), change.getRight()));
+          System.err.println(String.format("%s一致しません。正しい値 %s 実際の値 %s", change.getPropertyName(), change.getLeft(), change.getRight()));
       }
   }));
 
@@ -38,61 +38,61 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
 
 ## 数据敏感词过滤
 
-- 使用示例👉 [mybatis-mate-sensitive-words](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sensitive-words)
-- 数据敏感词过滤（AC 算法）配置完处理器，框架自动处理请求的所有字符串敏感词过滤，支持嵌套关键词让敏感词无处遁形。
-- 数据库自维护敏感词库（免费、可控），默认加载缓存词根支持指定重新加载词库。
+- 使用例👉 [mybatis-mate-sensitive-words](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sensitive-words)
+- データのセンシティブワードフィルタリング（AC アルゴリズム）：ハンドラーを設定するだけで、フレームワークがすべてのリクエスト内の文字列に対して自動でセンシティブワードのフィルタリングを行います。ネストされたキーワードもサポートし、センシティブワードを完全に検出します。
+- データベースによるセルフメンテナンス型センシティブワード辞書（無料・制御可能）：デフォルトでキャッシュされた語根を読み込み、指定した辞書での再読み込みもサポートします。
 
-## 数据范围（数据权限）
+## データ範囲（データ権限）
 
-- 使用示例：[mybatis-mate-datascope](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-datascope)
-- 注解 @DataScope
-  |  属性  |     类型     | 必须指定 | 默认值 | 描述                                   |
+- 使用例：[mybatis-mate-datascope](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-datascope)
+- @DataScope アノテーション
+  |  属性  |     型     | 必須指定 | デフォルト値 | 説明                                   |
   | :----: | :----------: | :------: | :----: | -------------------------------------- |
   |  type  |    String    |    否    |   ""   | 范围类型，用于区分对于业务分类，默认空 |
   | value  | DataColumn[] |    否    |   {}   | 数据权限字段，支持多字段组合           |
   | ignore |   boolean    |    否    | false  | 忽略权限处理逻辑 true 是 false 否      |
-- 注解 @DataColumn
-  | 属性  |  类型  | 必须指定 | 默认值 | 描述       |
+- @DataColumn アノテーション
+  |  属性  |     型     | 必須指定 | デフォルト値 | 説明                                   |
   | :---: | :----: | :------: | :----: | ---------- |
   | alias | String |    否    |   ""   | 关联表别名 |
   | name  | String |    是    |        | 字段名     |
-- 行级粒度权限控制，例如：上级部门可以查看子部门信息。
+- 行レベルの粒度の権限制御です。例：上位部門は子部門の情報を確認できます。
   ```java
-  // 测试 test 类型数据权限范围，混合分页模式
+  // テスト test タイプのデータ権限範囲、混合ページングモード
   @DataScope(type = "test", value = {
-          // 关联表 user 别名 u 指定部门字段权限
+          // 関連テーブル user にエイリアス u を付け、部門フィールドの権限を指定します。
           @DataColumn(alias = "u", name = "department_id"),
-          // 关联表 user 别名 u 指定手机号字段（自己判断处理）
+          // 関連テーブル user にエイリアス u を付け、携帯電話番号フィールドを指定します（自動で判断して処理）。
           @DataColumn(alias = "u", name = "mobile")
   })
   @Select("select u.* from user u")
   List<User> selectTestList(IPage<User> page, Long id, @Param("name") String username);
 
-  // 测试数据权限，最终执行 SQL 语句
+  // データ権限をテストし、最終的に実行される SQL 文を確認します。
   SELECT u.* FROM user u WHERE (u.department_id IN ('1', '2', '3', '5')) AND u.mobile LIKE '%1533%' LIMIT 1,10
   ```
 
-:::note[关于`IDataScopeProvider`的说明]
+:::note[`IDataScopeProvider` についての説明]
 
-请注意必须注入 IDataScopeProvider 实现类处理数据权限，关于数据传参支持 2 种方式：
-1，自定义 mapper 方法通过方法参数传递，在 setWhere 方法 `Object[] args` 参数中获取
-2，利用 ThreadLocal 传递参数，你可以拦截 controller 层或者 service 层设置数据权限处理参数，更多可以 👉[参考](https://gitee.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-dynamic-tablename)
+データ権限を処理するには、必ず IDataScopeProvider の実装クラスを注入する必要があります。データの引数渡しについては、次の2つの方法がサポートされています。
+1．カスタムの mapper メソッドでメソッド引数として渡し、setWhere メソッド内の `Object[] args` パラメーターから取得する。
+2．ThreadLocal を利用してパラメーターを渡す。Controller 層や Service 層をインターセプトしてデータ権限処理用のパラメーターを設定することができます。さらに詳しくは… 👉[参考](https://gitee.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-dynamic-tablename)
 
 :::
 
-## 表结构自动维护
+## テーブル構造の自動メンテナンス
 
-- 使用示例：
+- 使用例：
   - 👉 [mybatis-mate-ddl-mysql](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-ddl-mysql)
   - 👉 [mybatis-mate-ddl-postgres](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-ddl-postgres)
-- 数据库 `Schema` 初始化，升级 `SQL` 自动维护，区别于 `flyway` 支持分表库、可控制代码执行 SQL 脚本
-- 首次会在数据库中生成 `ddl_history` 表，每次执行SQL脚本会自动维护版本信息。
+- データベースの `Schema` 初期化およびアップグレード用の SQL を自動でメンテナンスします。`flyway` とは異なり、分割テーブルデータベースをサポートし、コードによる SQL スクリプトの実行を制御できます。
+- 初回実行時にデータベース内に `ddl_history` テーブルが生成され、以降 SQL スクリプトを実行するたびにバージョン情報が自動的に管理されます。
   ```java
   @Component
   public class MysqlDdl implements IDdl {
 
       /**
-       * 执行 SQL 脚本方式
+       * SQL スクリプトの実行方法
        */
       @Override
       public List<String> getSqlFiles() {
@@ -103,32 +103,32 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
       }
   }
 
-  // 切换到 mysql 从库，执行 SQL 脚本
+  // MySQL のスレーブデータベースに切り替えて、SQL スクリプトを実行します
   ShardingKey.change("mysqlt2");
   ddlScript.run(new StringReader("DELETE FROM user;\n" +
           "INSERT INTO user (id, username, password, sex, email) VALUES\n" +
           "(20, 'Duo', '123456', 0, 'Duo@baomidou.com');"));
   ```
 
-## 字段数据绑定（字典回写）
+## フィールドデータのバインディング（辞書による値の書き戻し）
 
-- 使用示例：👉 [mybatis-mate-dict](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-dict)
+- 使用例：👉 [mybatis-mate-dict](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-dict)
 - 注解 @FieldBind
-  |   属性   |  类型  | 必须指定 | 默认值 | 描述                                               |
+  |   属性   |  型  | 必須指定 | デフォルト値 | 説明                                               |
   | :------: | :----: | :------: | :----: | -------------------------------------------------- |
   | sharding | String |    否    |   ""   | 分库分表数据源指定                                 |
   |   type   | String |    是    |        | 类型（用于区分不同业务）                           |
   |  target  | String |    是    |        | 目标显示属性（待绑定属性，注意非数据库字段请排除） |
-- 数据库 `sex` 值 `0`、`1` 自动映射为 `男`、`女`
-- 可以绑定映射为对象，例如：根据订单 ID 映射 订单对象或者编号
+- データベースの `sex` 値が `0`、`1` の場合、自動的に `男`、`女` にマッピングされます。
+- オブジェクトへのマッピングも可能です。例：注文 ID に基づいて注文オブジェクトまたは注文番号をマッピングすることができます。
   ```java
   @FieldBind(type = "user_sex", target = "sexText")
   private Integer sex;
-  // 绑定显示属性，非表字典（排除）
+  // 表示用プロパティをバインディングし、テーブルに存在しない辞書項目を除外します。
   @TableField(exist = false)
   private String sexText;
   ```
-- 绑定业务处理类需要实现 IDataBind 接口，注入 spring 容器
+- 業務処理クラスをバインディングするには、IDataBind インターフェースを実装し、Spring コンテナに注入する必要があります。
   ```java
   @Component
   public class DataBind implements IDataBind {
@@ -136,17 +136,17 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
   }
   ```
 
-## 虚拟属性绑定
+## 仮想プロパティのバインディング
 
-- 使用示例：👉 [mybatis-mate-jsonbind](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-jsonbind)
-- 注解 @JsonBind
+- 使用例：👉 [mybatis-mate-jsonbind](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-jsonbind)
+- @JsonBind アノテーション
   ```java
   @JsonBind("绑定类型")
   public class User {
       ...
   }
   ```
-- 返回 Json 虚拟属性绑定策略
+- 返却される Json に対する仮想プロパティのバインディング戦略
   ```java
   @Component
   public class JsonBindStrategy implements IJsonBindStrategy {
@@ -155,12 +155,12 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
       public Map<String, Function<Object, Map<String, Object>>> getStrategyFunctionMap() {
           return new HashMap<String, Function<Object, Map<String, Object>>>(16) {
               {
-                  // 注入虚拟节点
+                  // 仮想ノードを注入する
                   put(Type.departmentRole, (obj) -> new HashMap(2) {{
                       User user = (User) obj;
-                      // 枚举类型转换
+                      // 列挙型の変換
                       put("statusText", StatusEnum.get(user.getStatus()).getDesc());
-                      // 可调用数据库查询角色信息
+                      // データベースを呼び出してロール情報を取得可能
                       put("roleName", "经理");
                   }});
               }
@@ -169,17 +169,17 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
   }
   ```
 
-## 字段加密解密
+## フィールドの暗号化と復号化
 
-- 使用示例：👉 [mybatis-mate-encrypt](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-encrypt)
-- 注解 @FieldEncrypt
-  |   属性    |   类型    | 必须指定 |      默认值      | 描述                 |
+- 使用例：👉 [mybatis-mate-encrypt](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-encrypt)
+- @FieldEncrypt アノテーション
+  |   属性    |    型    | 必須指定 |      デフォルト値      | 説明                 |
   | :-------: | :-------: | :------: | :--------------: | -------------------- |
   | password  |  String   |    否    |        ""        | 加密密码             |
   | algorithm | Algorithm |    否    | PBEWithMD5AndDES | PBE MD5 DES 混合算法 |
   | encryptor |   Class   |    否    |    IEncryptor    | 加密处理器           |
-- 算法 Algorithm
-  |            算法             |              描述              |
+- アルゴリズム
+  |            アルゴリズム             |              説明              |
   | :-------------------------: |:----------------------------:|
   |           MD5_32            |     32 位 md5 算法              |
   |           MD5_16            |         16 位 md5 算法          |
@@ -211,7 +211,7 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
 
 ## 字段脱敏
 
-- 使用示例：👉 [mybatis-mate-sensitive-jackson](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sensitive-jackson)
+- 使用例：👉 [mybatis-mate-sensitive-jackson](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sensitive-jackson)
 - 注解 @FieldSensitive
 - 注解 `FieldSensitive` 实现数据脱敏，内置 `手机号`、`邮箱`、`银行卡号` 等 9 种常用脱敏规则
   ```java
@@ -239,11 +239,11 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
 
 - 使用示例：👉 [mybatis-mate-sharding](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sharding)
 - 注解 @Sharding
-  |   属性   |  类型  | 必须指定 |         默认值         | 描述                         |
+  |   属性   |  型  | 必須指定 |         デフォルト值         | 説明                         |
   | :------: | :----: | :------: | :--------------------: | ---------------------------- |
   |  value   | String |    是    |           ""           | 分库组名，空使用默认主数据源 |
   | strategy | Class  |    否    | RandomShardingStrategy | 分库&分表策略                |
-- 配置
+- コンフィグ
   ```xml
   mybatis-mate:
     sharding:
@@ -271,9 +271,9 @@ Mybatis-Mate は、MyBatis-Plus 対して提供されるエンタープライズ
 
   }
   ```
-- 切换指定数据库节点
+- 指定したデータベースノードに切り替える
   ```java
-  // 切换到 mysql 从库 node2 节点
+  // MySQL のスレーブ node2 ノードに切り替えます
   ShardingKey.change("mysqlnode2");
   ```
 

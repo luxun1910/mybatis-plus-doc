@@ -32,7 +32,7 @@ public class User {
 public enum GradeEnum {
     PRIMARY(1, "小学"),
     SECONDARY(2, "中学"),
-    HIGH(3, "高中");
+    HIGH(3, "高校");
 
     @EnumValue // 标记数据库存的值是code
     private final int code;
@@ -49,9 +49,9 @@ public enum GradeEnum {
 @Getter
 @AllArgsConstructor
 public enum AgeEnum implements IEnum<Integer> {
-    ONE(1, "一岁"),
-    TWO(2, "二岁"),
-    THREE(3, "三岁");
+    ONE(1, "一歳"),
+    TWO(2, "二歳"),
+    THREE(3, "三歳");
 
     private final int value;
     private final String desc;

@@ -1,77 +1,77 @@
 ---
-title: 批量操作
+title: バッチ操作
 sidebar:
   order: 7
 ---
-批量操作是一种高效处理大量数据的技术，它允许开发者一次性执行多个数据库操作，从而减少与数据库的交互次数，提高数据处理的效率和性能。在MyBatis-Plus中，批量操作主要用于以下几个方面：
+バッチ操作は大量のデータを効率的に処理する技術で、開発者は一度に複数のデータベース操作を実行することができ、データベースとの対話回数を減らし、データ処理の効率とパフォーマンスを向上させることができます。MyBatis-Plusでは、バッチ操作は主に以下のような場面で使用されます：
 
-- 数据插入（Insert）：批量插入是批量操作中最常见的应用场景之一。通过一次性插入多条记录，可以显著减少SQL语句的执行次数，加快数据写入速度。这在数据迁移、初始化数据等场景中尤为有用。
-- 数据更新（Update）：批量更新允许同时修改多条记录的特定字段，适用于需要对大量数据进行统一变更的情况，如批量修改用户状态、更新产品价格等。
-- 数据删除（Delete）：批量删除操作可以快速移除数据库中的多条记录，常用于数据清理、用户注销等场景。
+- データ挿入（Insert）：バッチ挿入はバッチ操作の中で最も一般的な使用例の1つです。複数のレコードを一度に挿入することで、SQL文の実行回数を大幅に削減し、データ書き込み速度を向上させることができます。これはデータ移行、データ初期化などの場面で特に有用です。
+- データ更新（Update）：バッチ更新により、複数のレコードの特定のフィールドを同時に変更することができます。大量のデータを一括で変更する必要がある場合（ユーザー状態の一括変更、製品価格の更新など）に適しています。
+- データ削除（Delete）：バッチ削除操作により、データベースから複数のレコードを素早く削除することができます。データクリーンアップ、ユーザー登録解除などの場面でよく使用されます。
 
-## 功能概览
+## 機能概要
 
-- 支持版本：`3.5.4 +`
-- 事务控制：需手动管理（默认关闭）
-- 执行结果：返回批量处理结果，便于业务判断成功与否
-- 数据写入：取决于代码是否正确执行到`flushStatements`
-- 兼容性：支持Spring与非Spring项目
-- 异常类型：执行抛出`PersistenceException`
-- 建议：对于`saveOrUpdate`方法，建议保持简单的新增或更新操作
+- サポートバージョン：`3.5.4 +`
+- トランザクション制御：手動管理が必要（デフォルトでオフ）
+- 実行結果：バッチ処理結果を返し、ビジネスロジックでの成功/失敗の判断が容易
+- データ書き込み：`flushStatements`が正しく実行されるかどうかに依存
+- 互換性：Springプロジェクトと非Springプロジェクトの両方をサポート
+- 例外タイプ：実行時に`PersistenceException`をスロー
+- 推奨事項：`saveOrUpdate`メソッドについては、シンプルな新規追加または更新操作を維持することを推奨
 
-## 类结构说明
+## クラス構造の説明
 
 ### MybatisBatch<?>
 
-- 泛型：实际数据类型
-- sqlSessionFactory：可通过容器获取，非Spring容器下需自行初始化Mybatis并记录上下文
-- dataList：实际批量数据处理列表（不可为空）
+- ジェネリック：実際のデータ型
+- sqlSessionFactory：コンテナから取得可能。非Springコンテナ環境ではMybatisを初期化し、コンテキストを記録する必要がある
+- dataList：実際のバッチデータ処理リスト（nullは不可）
 
 ### MybatisBatch.Method<?>
 
-实际为BatchMethod，简化框架内部操作方法调用。
+実際にはBatchMethodで、フレームワーク内部の操作方法呼び出しを簡略化します。
 
-- 泛型：实际Mapper方法参数类型
-- mapperClass：具体的Mapper类
+- ジェネリック：実際のMapperメソッドパラメータ型
+- mapperClass：具体的なMapperクラス
 
 ### BatchMethod<?>
 
-- 泛型：实际Mapper方法参数类型
-- statementId：执行的MappedStatement ID
-- parameterConvert：参数类型转换处理器，用于数据类型与Mapper方法参数不一致时的转换
+- ジェネリック：実際のMapperメソッドパラメータ型
+- statementId：実行するMappedStatement ID
+- parameterConvert：パラメータ型変換ハンドラ。データ型とMapperメソッドパラメータが一致しない場合の変換に使用
 
-## 使用步骤
+## 使用手順
 
-1. 创建MybatisBatch实例（绑定数据与sqlSessionFactory）
-2. 创建MybatisBatch.Method实例（确定执行的Mapper类方法）
-3. 执行操作（将批量参数转换为Mapper方法所需参数）
+1. MybatisBatchインスタンスの作成（データとsqlSessionFactoryのバインド）
+2. MybatisBatch.Methodインスタンスの作成（実行するMapperクラスメソッドの確定）
+3. 操作の実行（バッチパラメータをMapperメソッドに必要なパラメータに変換）
 
-## 返回值说明
+## 戻り値の説明
 
-返回类型：`List<BatchResult>`
+戻り値の型：`List<BatchResult>`
 
-返回内容：每次执行MappedStatement + SQL的操作结果分组。
+戻り値の内容：各回のMappedStatement + SQLの実行結果をグループ化したもの。
 
-**注意**：例如批量根据ID更新，若10条数据中5条更新一个字段，5条更新两个字段，则返回值为容量为2的List，分别存储5条记录的更新情况。
+**注意**：例えば、IDによるバッチ更新の際、10件のデータのうち5件が1つのフィールドを更新し、5件が2つのフィールドを更新する場合、戻り値は容量2のListとなり、それぞれ5件のレコードの更新状況を格納します。
 
-## 使用示例
+## 使用例
 
-框架提供MybatisBatchUtils进行静态方法调用。
+フレームワークはMybatisBatchUtilsを提供し、静的メソッド呼び出しが可能です。
 
-### execute方法
+### executeメソッド
 
-适用于insert, update, delete操作。
+insert、update、delete操作に適用。
 
-#### 示例一：实体类型数据
+#### 例1：エンティティ型データ
 
 ```java
-List<H2User> userList = Arrays.asList(new H2User(2000L, "测试"), new H2User(2001L, "测试"));
+List<H2User> userList = Arrays.asList(new H2User(2000L, "テスト"), new H2User(2001L, "テスト"));
 MybatisBatch<H2User> mybatisBatch = new MybatisBatch<>(sqlSessionFactory, userList);
 MybatisBatch.Method<H2User> method = new MybatisBatch.Method<>(H2UserMapper.class);
 mybatisBatch.execute(method.insert());
 ```
 
-#### 示例二：非实体类型数据
+#### 例2：非エンティティ型データ
 
 ```java
 List<Long> ids = Arrays.asList(120000L, 120001L);
@@ -84,14 +84,14 @@ mybatisBatch.execute(method.insert(id -> {
 }));
 ```
 
-#### 示例三：自定义方法插入（无注解）
+#### 例3：カスタムメソッド挿入（アノテーションなし）
 
 ```java
-// mapper方法定义
+// mapperメソッド定義
 @Insert("insert into h2user(name,version) values( #{name}, #{version})")
 int myInsertWithoutParam(H2User user1);
 
-// 准备数据
+// データ準備
 List<H2User> h2UserList = new ArrayList<>();
 for (int i = 0; i < 1000; i++) {
     h2UserList.add(new H2User("myInsertWithoutParam" + i));
@@ -102,14 +102,14 @@ MybatisBatch.Method<H2User> method = new MybatisBatch.Method<>(H2UserMapper.clas
 mybatisBatch.execute(method.get("myInsertWithoutParam"));
 ```
 
-#### 示例四：自定义方法插入（带注解）
+#### 例4：カスタムメソッド挿入（アノテーション付き）
 
 ```java
-// 带注解的mapper方法定义
+// アノテーション付きのmapperメソッド定義
 @Insert("insert into h2user(name,version) values( #{user1.name}, #{user1.version})")
 int myInsertWithParam(@Param("user1") H2User user1);
 
-// 准备数据
+// データ準備
 List<H2User> h2UserList = new ArrayList<>();
 for (int i = 0; i < 1000; i++) {
     h2UserList.add(new H2User("myInsertWithParam" + i));
@@ -124,13 +124,13 @@ mybatisBatch.execute(method.get("myInsertWithParam", (user) -> {
 }));
 ```
 
-### saveOrUpdate方法
+### saveOrUpdateメソッド
 
-执行保存或更新操作。
+保存または更新操作を実行。
 
-**注意**：跨sqlSession下需注意缓存和数据感知问题。
+**注意**：異なるsqlSession間ではキャッシュとデータの認識に関する問題に注意が必要です。
 
-#### 跨sqlSession示例
+#### 異なるsqlSession間の例
 
 ```java
 @Autowired
@@ -143,12 +143,12 @@ for (int i = 0; i < 100; i++) {
 MybatisBatch.Method<H2User> mapperMethod = new MybatisBatch.Method<>(H2UserMapper.class);
 
 new MybatisBatch<>(sqlSessionFactory, h2UserList).saveOrUpdate(
-    mapperMethod.insert(), // 指定insert方法
-    ((sqlSession, h2User) -> userMapper.selectById(h2User.getTestId()) == null), // 判断条件
-    mapperMethod.updateById()); // 指定update方法
+    mapperMethod.insert(), // insertメソッドの指定
+    ((sqlSession, h2User) -> userMapper.selectById(h2User.getTestId()) == null), // 条件判断
+    mapperMethod.updateById()); // updateメソッドの指定
 ```
 
-#### 共用sqlSession示例
+#### 共通sqlSessionの例
 
 ```java
 List<H2User> h2UserList = new ArrayList<>();
@@ -158,14 +158,14 @@ for (int i = 0; i < 100; i++) {
 MybatisBatch.Method<H2User> mapperMethod = new MybatisBatch.Method<>(H2UserMapper.class);
 
 new MybatisBatch<>(sqlSessionFactory, h2UserList).saveOrUpdate(
-    mapperMethod.insert(), // 指定insert方法
-    ((sqlSession, h2User) -> sqlSession.selectList(mapperMethod.get("selectById").getStatementId(), h2User.getTestId()).isEmpty()), // 判断条件
-    mapperMethod.updateById()); // 指定update方法
+    mapperMethod.insert(), // insertメソッドの指定
+    ((sqlSession, h2User) -> sqlSession.selectList(mapperMethod.get("selectById").getStatementId(), h2User.getTestId()).isEmpty()), // 条件判断
+    mapperMethod.updateById()); // updateメソッドの指定
 ```
 
-### 事务处理示例
+### トランザクション処理例
 
-#### Spring事务处理示例
+#### Springトランザクション処理例
 
 ```java
 @Autowired
@@ -173,15 +173,15 @@ private TransactionTemplate transactionTemplate;
 
 transactionTemplate.execute((TransactionCallback<List<BatchResult>>) status -> {
     MybatisBatch.Method<H2User> mapperMethod = new MybatisBatch.Method<>(H2UserMapper.class);
-    // 执行批量插入
+    // バッチ挿入の実行
     MybatisBatchUtils.execute(sqlSessionFactory, h2UserList, mapperMethod.insert());
-    throw new RuntimeException("出错了");
+    throw new RuntimeException("エラーが発生しました");
 });
 ```
 
 ### SQL LOAD csv
 
-> 如果对导入表有更高的性能要求，可以采用执行 `SQL LOAD csv` 的方式，如下为 `MySQL` 的示例：
+> インポートテーブルにより高いパフォーマンスが要求される場合は、`SQL LOAD csv` を実行する方式を採用できます。以下は `MySQL` の例です：
 
 ```sql
 LOAD DATA INFILE '/path/to/your/file.csv'

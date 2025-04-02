@@ -1,79 +1,79 @@
 ---
-title: 自动维护DDL
+title: DDLの自動メンテナンス
 sidebar:
   order: 10
 ---
 
-在MyBatis-Plus的`3.5.3+`版本中，引入了一项强大的功能：数据库DDL（数据定义语言）表结构的自动维护。这一功能通过执行SQL脚本来实现数据库模式的初始化和升级，与传统的`flyway`工具相比，它不仅支持分表库，还能够控制代码执行SQL脚本的过程。
+MyBatis-Plusの`3.5.3+`バージョンでは、強力な機能が導入されました：データベースDDL（データ定義言語）のテーブル構造の自動メンテナンスです。この機能はSQLスクリプトを実行することでデータベーススキーマの初期化とアップグレードを実現し、従来の`flyway`ツールと比較して、分割テーブルデータベースをサポートし、さらにコードによるSQLスクリプトの実行プロセスを制御することができます。
 
-## 功能概述
+## 機能概要
 
-- **自动维护DDL历史**：首次使用时，系统会在数据库中创建一个名为`ddl_history`的表，用于记录每次执行的SQL脚本版本信息。
-- **灵活的脚本执行**：支持在不同的数据库之间切换数据源，并动态执行相应的脚本命令。
-- **企业级特性**：这一功能被视为企业级的高级特性，并且是开源版本的一部分。
+- **DDL履歴の自動メンテナンス**：初回使用時に、システムは`ddl_history`という名前のテーブルをデータベースに作成し、実行されたSQLスクリプトのバージョン情報を記録します。
+- **柔軟なスクリプト実行**：異なるデータベース間でデータソースを切り替え、動的にスクリプトコマンドを実行することができます。
+- **エンタープライズ級の機能**：この機能はエンタープライズ級の高度な機能として位置づけられ、オープンソースバージョンの一部となっています。
 
-## 注意事项
+## 注意事項
 
-- 当执行DDL操作时，如果脚本中包含切换数据源以创建数据库的操作，可能会遇到异常。解决方法是，在切换到不同的数据库后，动态执行脚本命令。
+- DDL操作を実行する際、スクリプトにデータベースを作成するためのデータソース切り替えが含まれている場合、例外が発生する可能性があります。解決方法として、異なるデータベースに切り替えた後、動的にスクリプトコマンドを実行します。
 
-## 代码示例
+## コード例
 
-以下是一个使用MyBatis-Plus自动维护DDL的Java组件示例：
+以下は、MyBatis-PlusでDDLを自動メンテナンスするJavaコンポーネントの例です：
 
 ```java
 @Component
 public class MysqlDdl implements IDdl {
 
     /**
-     * 获取要执行的SQL脚本文件列表
+     * 実行するSQLスクリプトファイルのリストを取得
      */
     @Override
     public List<String> getSqlFiles() {
         return Arrays.asList(
                 "db/tag-schema.sql",
-                // 从`3.5.3.2`版本开始，支持执行存储过程。在文件名后追加`#$$`，其中`$$`是自定义的完整SQL分隔符。
-                // 存储过程脚本以`END`结尾，并追加分隔符`END;$$`表示脚本结束。
+                // `3.5.3.2`バージョンから、ストアドプロシージャの実行がサポートされました。ファイル名の末尾に`#$$`を追加し、その`$$`をカスタムの完全なSQL区切り文字として使用します。
+                // ストアドプロシージャスクリプトは`END`で終わり、区切り文字`END;$$`を追加してスクリプトの終わりを示します。
                 "db/procedure.sql#$$",
                 "D:\\db\\tag-data.sql"
         );
     }
 }
 
-// 切换到mysql从库，执行SQL脚本 (开源版本无此功能)
+// MySQLのスレーブデータベースに切り替えて、SQLスクリプトを実行（オープンソースバージョンにはこの機能はありません）
 ShardingKey.change("mysqlt2");
 ddlScript.run(new StringReader("DELETE FROM user;\n" +
         "INSERT INTO user (id, username, password, sex, email) VALUES\n" +
         "(20, 'Duo', '123456', 0, 'Duo@baomidou.com');"));
 ```
 
-在这个示例中，我们定义了一个`MysqlDdl`组件，它实现了`IDdl`接口，并提供了要执行的SQL脚本文件列表。通过调用`ShardingKey.change`方法，我们可以切换到mysql的从库，并使用`ddlScript.run`方法执行特定的SQL脚本。
+この例では、`MysqlDdl`コンポーネントを定義し、そこに`IDdl`インターフェースを実装して、実行するSQLスクリプトファイルのリストを提供しています。`ShardingKey.change`メソッドを呼び出すことで、MySQLのスレーブデータベースに切り替え、`ddlScript.run`メソッドを使用して特定のSQLスクリプトを実行できます。
 
-通过这种方式，MyBatis-Plus提供了一个高效且自动化的方式来管理数据库的DDL操作，极大地简化了数据库结构的管理和维护工作。
+この方法により、MyBatis-PlusはデータベースのDDL操作を管理するための効率的で自動化された方法を提供し、データベース構造の管理とメンテナンス作業を大幅に簡素化します。
 
-## 自定义运行器
+## カスタムランナー
 
-如果集成了MyBatis-Plus的starter的话，会自动实例化一个 DdlApplicationRunner 实例来执行 DDL 脚本。
+MyBatis-Plusのstarterを統合している場合、DDLスクリプトを実行するためのDdlApplicationRunnerインスタンスが自動的にインスタンス化されます。
 
-执行方式为自动提交事务，且忽略错误继续执行（其他脚本参数见如下）。
+実行方式は自動コミットトランザクションで、エラーを無視して続行します（その他のスクリプトパラメータは以下の通りです）。
 
-如果需要自定义控制，请自行注入一个DdlApplicationRunner实例至容器。
+カスタム制御が必要な場合は、独自のDdlApplicationRunnerインスタンスをコンテナに注入してください。
 
 ```java
     @Bean
     public DdlApplicationRunner ddlApplicationRunner(List<IDdl> ddlList) {
           DdlApplicationRunner ddlApplicationRunner = new DdlApplicationRunner(ddlList);
-        // 下面属性自 3.5.11 开始 ...
-        // 设置是否自动提交 默认: true
+        // 以下のプロパティは3.5.11から開始 ...
+        // 自動コミットの設定 デフォルト: true
         ddlApplicationRunner.setAutoCommit(false);
-        // 设置脚本遇到错误的处理方式 默认: 忽略错误,打印异常 (如果设置为抛出异常,那会终止下一个sql文件处理)
+        // スクリプトでエラーが発生した場合の処理方法の設定 デフォルト: エラーを無視し、例外を出力（例外をスローするように設定した場合、次のsqlファイルの処理が終了します）
         ddlApplicationRunner.setDdlScriptErrorHandler(DdlScriptErrorHandler.ThrowsErrorHandler.INSTANCE);
-        //是否抛出异常中断下个处理器处理 默认: false
+        // 例外をスローして次のハンドラーの処理を中断するかどうか デフォルト: false
         ddlApplicationRunner.setThrowException(true);
         ddlApplicationRunner.setScriptRunnerConsumer(scriptRunner -> {
-            scriptRunner.setLogWriter(null);   // 关闭执行日志打印 默认: System.out
-            scriptRunner.setErrorLogWriter(null); // 关闭错误日志打印  默认:System.err
-            scriptRunner.setStopOnError(true); // 遇到异常是否停止
-            scriptRunner.setRemoveCRs(false); //  是否替换\r\n 为 \n 默认: false
+            scriptRunner.setLogWriter(null);   // 実行ログの出力を無効化 デフォルト: System.out
+            scriptRunner.setErrorLogWriter(null); // エラーログの出力を無効化 デフォルト: System.err
+            scriptRunner.setStopOnError(true); // 例外発生時に停止するかどうか
+            scriptRunner.setRemoveCRs(false); // \r\nを\nに置換するかどうか デフォルト: false
         });
         return ddlApplicationRunner;
     }

@@ -4,10 +4,10 @@ sidebar:
   order: 8
 ---
 
-我们在 mybatis 的 `EnumOrdinalTypeHandler(基于枚举常量序号)` 和 `EnumTypeHandler(基于枚举常量名)` 之外  
-提供了更加灵活的枚举处理器 `MybatisEnumTypeHandler(基于枚举常量属性)`  
-只需要对枚举进行声明,即可实现枚举的自动映射  
-未进行声明的枚举则根据 `mybatis`的`defaultEnumTypeHandler` 的默认值`EnumTypeHandler` 来进行映射
+MyBatisの `EnumOrdinalTypeHandler(列挙定数の序数に基づく)` と `EnumTypeHandler(列挙定数名に基づく)` に加えて、  
+より柔軟な列挙型ハンドラ `MybatisEnumTypeHandler(列挙定数プロパティに基づく)` を提供します。  
+列挙型に宣言を行うだけで、自動的なマッピングを実現できます。  
+宣言されていない列挙型は、`mybatis` の `defaultEnumTypeHandler` のデフォルト値である `EnumTypeHandler` を使用してマッピングされます。
 
 ```java
 public class User {
@@ -17,41 +17,39 @@ public class User {
 }
 ```
 
-## 枚举声明
+## 列挙型の宣言
 
-声明该枚举使用 `MybatisEnumTypeHandler(基于枚举常量属性)` 进行映射
+`MybatisEnumTypeHandler(列挙定数プロパティに基づく)` を使用する列挙型を宣言します
 
-### 方式一：注解标记
+### 方法1：アノテーションによるマーキング
 
-枚举属性使用 `@EnumValue` 注解，指定枚举值在数据库中存储的实际值。支持枚举类中的任意字段，如序号或编码。
+列挙型のプロパティに `@EnumValue` アノテーションを使用し、データベースに保存する実際の値を指定します。列挙クラスの任意のフィールド（序数やコードなど）を指定可能です。
 
 ```java
-
 @Getter
 @AllArgsConstructor
 public enum GradeEnum {
-    PRIMARY(1, "小学"),
-    SECONDARY(2, "中学"),
-    HIGH(3, "高校");
+    PRIMARY(1, "小学校"),
+    SECONDARY(2, "中学校"), 
+    HIGH(3, "高等学校");
 
-    @EnumValue // 标记数据库存的值是code
+    @EnumValue // データベースに保存されている値がcodeであることをマークする
     private final int code;
-    // 其他属性...
+    // その他のプロパティ...
 }
 ```
 
-### 方式二：实现接口
+### 方法2：インターフェースの実装
 
-实现 `IEnum` 接口，实现 `getValue` 方法，指定枚举值在数据库中存储的实际值。支持枚举类中的任意字段，如序号或编码。
+`IEnum` インターフェースを実装し、`getValue` メソッドでデータベースに保存する実際の値を指定します。列挙クラスの任意のフィールド（序数やコードなど）を指定可能です。
 
 ```java
-
 @Getter
 @AllArgsConstructor
 public enum AgeEnum implements IEnum<Integer> {
-    ONE(1, "一歳"),
-    TWO(2, "二歳"),
-    THREE(3, "三歳");
+    ONE(1, "1歳"),
+    TWO(2, "2歳"),
+    THREE(3, "3歳");
 
     private final int value;
     private final String desc;
@@ -63,14 +61,14 @@ public enum AgeEnum implements IEnum<Integer> {
 }
 ```
 
-## 未声明枚举
+## 未宣言の列挙型
 
-未声明的枚举将使用 `mybatis` 的 `defaultEnumTypeHandler` 的默认值 `EnumTypeHandler` 进行映射  
-可以通过修改全局配置来变更,不过这对上面步骤声明的枚举无效
+宣言されていない列挙型は、`mybatis` の `defaultEnumTypeHandler` のデフォルト値である `EnumTypeHandler` を使用してマッピングされます。  
+グローバル設定を変更することで変更可能ですが、上記の方法で宣言された列挙型には影響しません。
 
-### 修改全局 defaultEnumTypeHandler
+### グローバルなdefaultEnumTypeHandlerの変更
 
-yml 配置文件中配置：
+YML設定ファイルでの設定：
 
 ```yml
 mybatis-plus:
@@ -78,7 +76,7 @@ mybatis-plus:
     default-enum-type-handler: xx.xx.xx.MyEnumTypeHandler
 ```
 
-或者通过自定义配置类：
+またはカスタム設定クラスを使用：
 
 ```java
 
@@ -98,40 +96,39 @@ public class MybatisPlusAutoConfiguration {
 }
 ```
 
-或者其他
+またはその他の方法
 
-## 号外参考: 如何序列化枚举值为前端返回值
+## 参考：フロントエンドへの列挙値のシリアライズ方法
 
 ### Jackson
 
-#### 一、重写 toString 方法
+#### 方法1：toStringメソッドのオーバーライド
 
-##### Spring Boot
+##### Spring Bootの場合
 
 ```java
-
 @Bean
 public Jackson2ObjectMapperBuilderCustomizer customizer() {
     return builder -> builder.featuresToEnable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
 }
 ```
 
-##### Jackson 独立使用
+##### Jackson単体使用の場合
 
 ```java
 ObjectMapper objectMapper = new ObjectMapper();
 objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 ```
 
-在枚举中重写 toString 方法，以上两种方式任选其一。
+列挙型で toString メソッドをオーバーライドし、上記いずれかの方法を選択します。
 
-#### 二、注解处理
+#### 方法2：アノテーション処理
 
 ```java
 public enum GradeEnum {
-    PRIMARY(1, "小学"),
-    SECONDORY(2, "中学"),
-    HIGH(3, "高中");
+    PRIMARY(1, "小学校"),
+    SECONDARY(2, "中学校"),
+    HIGH(3, "高校");
 
     GradeEnum(int code, String descp) {
         this.code = code;
@@ -139,23 +136,23 @@ public enum GradeEnum {
     }
 
     @EnumValue
-    @JsonValue // 标记响应json值
+    @JsonValue // jsonレスポンス値であることをマーク
     private final int code;
 }
 ```
 
 ### Fastjson
 
-#### 一、重写 toString 方法
+#### 方法1：toString メソッドのオーバーライド
 
-##### 全局处理方式
+##### グローバル設定
 
 ```java
 FastJsonConfig config = new FastJsonConfig();
 config.setSerializerFeatures(SerializerFeature.WriteEnumUsingToString);
 ```
 
-##### 局部处理方式
+##### 個別フィールド設定
 
 ```java
 
@@ -163,6 +160,6 @@ config.setSerializerFeatures(SerializerFeature.WriteEnumUsingToString);
 private UserStatus status;
 ```
 
-在枚举中重写 toString 方法，以上两种方式任选其一。
+列挙型でtoStringメソッドをオーバーライドし、上記いずれかの方法を選択します。
 
-通过以上步骤，你可以优雅地在 MyBatis-Plus 中使用枚举属性，并且能够方便地将枚举值序列化为前端所需的格式。
+これらの手順により、MyBatis-Plus で列挙型プロパティを効果的に使用し、フロントエンドに適した形式で列挙値をシリアライズできます。

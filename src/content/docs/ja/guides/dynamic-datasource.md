@@ -1,38 +1,40 @@
 ---
-title: 多数据源支持
+title: マルチデータソースサポート
 sidebar:
   order: 14
 ---
 
-随着项目规模的扩大，单一数据源已无法满足复杂业务需求，多数据源（动态数据源）应运而生。本文将介绍两种 MyBatis-Plus 的多数据源扩展插件：开源生态的 `dynamic-datasource` 和 企业级生态的 `mybatis-mate`。
+プロジェクト規模の拡大に伴い、単一のデータソースでは複雑なビジネス要件を満たすことができなくなり、マルチデータソース（動的データソース）が生まれました。本稿では、MyBatis-Plus の2つのマルチデータソース拡張プラグインについて紹介します：オープンソースエコシステムの `dynamic-datasource` とエンタープライズエコシステムの `mybatis-mate` です。
 
 ## dynamic-datasource
 
-`dynamic-datasource` 是一个开源的 Spring Boot 多数据源启动器，提供了丰富的功能，包括数据源分组、敏感信息加密、独立初始化表结构等。
+`dynamic-datasource` は、オープンソースの Spring Boot マルチデータソーススターターで、データソースのグループ化、機密情報の暗号化、独立したテーブル構造の初期化など、豊富な機能を提供しています。
 
-### 特性
+### 特徴
 
-- **数据源分组**：适用于多种场景，如读写分离、一主多从等。
-- **敏感信息加密**：使用 `ENC()` 加密数据库配置信息。
-- **独立初始化**：支持每个数据库独立初始化表结构和数据库。
-- **自定义注解**：支持自定义注解，需继承 `DS`。
-- **简化集成**：提供对 Druid、HikariCP 等连接池的快速集成。
-- **组件集成**：支持 Mybatis-Plus、Quartz 等组件的集成方案。
-- **动态数据源**：支持项目启动后动态增加或移除数据源。
-- **分布式事务**：提供基于 Seata 的分布式事务方案。
+- **データソースのグループ化**：読み書き分離、一主多従など、様々なシナリオに適用可能です。
+- **機密情報の暗号化**：`ENC()` を使用してデータベース設定情報を暗号化します。
+- **独立した初期化**：各データベースのテーブル構造とデータベースを独立して初期化することをサポートします。
+- **カスタムアノテーション**：`DS` を継承したカスタムアノテーションをサポートします。
+- **簡素化された統合**：Druid、HikariCP などのコネクションプールへの迅速な統合を提供します。
+- **コンポーネント統合**：Mybatis-Plus、Quartz などのコンポーネントの統合ソリューションをサポートします。
+- **動的データソース**：プロジェクト起動後にデータソースを動的に追加または削除することをサポートします。
+- **分散トランザクション**：Seata ベースの分散トランザクションソリューションを提供します。
 
-### 约定
+### 規約
 
-- 本框架专注于数据源切换，不限制具体操作。
-- 配置文件中以下划线 `_` 分割的数据源首部为组名。
-- 切换数据源可以是组名或具体数据源名。
-- 默认数据源名为 `master`，可通过 `spring.datasource.dynamic.primary` 修改。
-- 方法上的注解优先于类上的注解。
+- 本フレームワークはデータソースの切り替えに特化しており、具体的な操作は制限しません。
+- 設定ファイルでアンダースコア `_` で区切られたデータソースの先頭がグループ名となります。
+- データソースの切り替えはグループ名または具体的なデータソース名で行えます。
+- デフォルトのデータソース名は `master` で、`spring.datasource.dynamic.primary` で変更可能です。
+- メソッド上のアノテーションはクラス上のアノテーションよりも優先されます。
 
 ### 使用方法
 
-1. **引入依赖**：
-  - SpringBoot2
+1. **依存関係の追加**：
+
+- SpringBoot2
+
   ```xml
   <dependency>
     <groupId>com.baomidou</groupId>
@@ -41,7 +43,8 @@ sidebar:
   </dependency>
   ```
 
- - SpringBoot3
+- SpringBoot3
+
  ```xml
  <dependency>
   <groupId>com.baomidou</groupId>
@@ -50,7 +53,7 @@ sidebar:
  </dependency>
  ```  
 
-2. **配置数据源**：
+2. **データソースの設定**：
 
 ```yaml
 spring:
@@ -76,7 +79,7 @@ spring:
           driver-class-name: com.mysql.jdbc.Driver
 ```
 
-3. **使用 `@DS` 切换数据源**：
+3. **`@DS` を使用してデータソースを切り替え**：
 
 ```java
 @Service
@@ -94,22 +97,22 @@ public class UserServiceImpl implements UserService {
 }
 ```
 
-更多使用教程请参考[Dynamic-Datasource 官网](https://github.com/baomidou/dynamic-datasource)
+より詳細な使用方法については[Dynamic-Datasource 公式サイト](https://github.com/baomidou/dynamic-datasource)を参照してください。
 
 ## mybatis-mate
 
-`mybatis-mate` 是一个 MyBatis-Plus 的付费企业组件，内置很多好用的高级特性，其中包括多数据源扩展组件，提供了高效简单的多数据源支持。
+`mybatis-mate` は、MyBatis-Plus の有料エンタープライズコンポーネントで、便利かつ高度な機能が数多く組み込まれており、その中にはマルチデータソース拡張コンポーネントも含まれています。効率的でシンプルなマルチデータソースサポートを提供します。
 
-### 特性
+### 特徴
 
-- **注解 `@Sharding`**：支持通过注解切换数据源。
-- **配置**：支持灵活的数据源配置。
-- **动态加载卸载**：支持动态加载和卸载数据源。
-- **多数据源事务**：支持 JTA Atomikos 分布式事务。
+- **`@Sharding` アノテーション**：アノテーションを使用してデータソースを切り替えることをサポートします。
+- **設定**：柔軟なデータソース設定をサポートします。
+- **動的ロード/アンロード**：データソースの動的なロードとアンロードをサポートします。
+- **マルチデータソーストランザクション**：JTA Atomikos 分散トランザクションをサポートします。
 
 ### 使用方法
 
-1. **配置数据源**：
+1. **データソースの設定**：
 
 ```xml
 mybatis-mate:
@@ -127,7 +130,7 @@ mybatis-mate:
           ...
 ```
 
-2. **使用 `@Sharding` 切换数据源**：
+2. **`@Sharding` を使用してデータソースを切り替え**：
 
 ```java
 @Mapper
@@ -140,17 +143,17 @@ public interface UserMapper extends BaseMapper<User> {
 }
 ```
 
-3. **切换指定数据库节点**：
+3. **指定したデータベースノードに切り替え**：
 
 ```java
-// 切换到 mysql 从库 node2 节点
+// mysql のスレーブノード node2 に切り替え
 ShardingKey.change("mysqlnode2");
 ```
 
-更多使用示例请参考
+より詳細な使用例については以下を参照してください
 
-- 多数据源动态加载卸载：👉 [mybatis-mate-sharding-dynamic](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sharding-dynamic)
+- マルチデータソースの動的ロード/アンロード：👉 [mybatis-mate-sharding-dynamic](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sharding-dynamic)
 
-- 多数据源事务（jta atomikos）：👉 [mybatis-mate-sharding-jta-atomikos](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sharding-jta-atomikos)
+- マルチデータソーストランザクション（jta atomikos）：👉 [mybatis-mate-sharding-jta-atomikos](https://gitee.com/baomidou/mybatis-mate-examples/tree/master/mybatis-mate-sharding-jta-atomikos)
 
-通过上述介绍，我们可以看到 `dynamic-datasource` 和 `mybatis-mate` 都提供了强大的多数据源支持，开发者可以根据项目需求选择合适的插件来实现数据源的灵活管理。
+上記の紹介から、`dynamic-datasource` と `mybatis-mate` の両方が強力なマルチデータソース対応を提供していることがわかります。開発者はプロジェクトの要件に応じて適切なプラグインを選択し、データソースを柔軟に管理することができます。

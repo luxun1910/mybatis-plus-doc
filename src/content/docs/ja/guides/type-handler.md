@@ -1,5 +1,5 @@
 ---
-title: 字段类型处理器
+title: タイプハンドラー
 sidebar:
   order: 18
 ---

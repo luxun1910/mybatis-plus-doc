@@ -1,40 +1,40 @@
 ---
-title: SQL分析与打印
+title: SQL分析と出力
 sidebar:
   order: 15
 ---
 
 import LastedDependency from '@/components/LastedDependency.astro';
 
-MyBatis-Plus提供了SQL分析与打印的功能，通过集成`p6spy`组件，可以方便地输出SQL语句及其执行时长。本功能适用于MyBatis-Plus 3.1.0及以上版本。
+MyBatis-Plus は SQL の解析および出力機能を提供しており、`p6spy` コンポーネントを統合することで、SQL 文とその実行時間を簡単に出力できます。この機能は MyBatis-Plus 3.1.0 以上のバージョンで使用可能です。
 
-## p6spy简介
+## p6spyの概要
 
-[`p6spy`](https://github.com/p6spy/p6spy) 是一个针对数据库访问进行拦截和记录的工具，它通过代理JDBC驱动程序来工作。这意味着你的应用程序可以像往常一样使用JDBC，而`p6spy`会在幕后记录所有的SQL语句及其执行时间。这对于开发和调试过程中的SQL优化非常有用。
+[`p6spy`](https://github.com/p6spy/p6spy) は、データベースアクセスをインターセプトして記録するツールで、JDBC ドライバーをプロキシすることで動作します。これは、アプリケーションが通常通り JDBC を使用できることを意味し、`p6spy` はバックグラウンドで全てのSQLステートメントとその実行時間を記録します。これは開発とデバッグプロセスにおけるSQL最適化に非常に役立ちます。
 
-`p6spy`不仅限于记录SQL日志，它还提供了一些高级功能，如：
+`p6spy` はSQLログの記録だけでなく、以下のような高度な機能も提供します：
 
-- **慢SQL检测**：通过配置`outagedetection`和`outagedetectioninterval`，`p6spy`可以记录执行时间超过设定阈值的SQL语句。
-- **自定义日志格式**：通过`logMessageFormat`，你可以自定义SQL日志的输出格式，包括时间戳、执行时间、SQL语句等。
-- **日志输出控制**：`appender`配置项允许你选择日志输出到控制台、文件或日志系统。
+- **スロークエリの検出**：`outagedetection` と `outagedetectioninterval` を設定することで、`p6spy` は設定されたしきい値を超える実行時間を持つSQLステートメントを記録できます。
+- **カスタムログフォーマット**：`logMessageFormat` を使用して、タイムスタンプ、実行時間、SQLステートメントなどを含むSQLログの出力フォーマットをカスタマイズできます。
+- **ログ出力の制御**：`appender` 設定により、ログをコンソール、ファイル、またはログシステムに出力するかを選択できます。
 
-`p6spy`是一个强大的工具，它为MyBatis-Plus用户提供了便捷的SQL分析与打印功能。通过合理配置，你可以在开发和测试阶段有效地监控和优化SQL语句。然而，由于性能损耗，建议在生产环境中谨慎使用。
+`p6spy` は強力なツールで、MyBatis-Plus ユーザーに便利なSQL分析と出力機能を提供します。適切に設定することで、開発とテスト段階で効果的にSQLステートメントを監視し最適化できます。ただし、パフォーマンスへの影響があるため、本番環境での使用は慎重に行うことをお勧めします。
 
-## 示例工程
+## サンプルプロジェクト
 
-为了更好地理解如何使用这一功能，可以参考官方提供的示例工程：
+この機能の使用方法をより良く理解するために、公式のサンプルプロジェクトを参照できます：
 
 - [mybatis-plus-sample-crud](https://gitee.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-crud)
 
-## 依赖引入
+## 依存関係の追加
 
-首先，需要在项目中引入`p6spy`依赖。以下是Maven和Gradle两种构建工具的引入方式：
+まず、プロジェクトに `p6spy` の依存関係を追加する必要があります。以下は Maven と Gradle の2つのビルドツールでの追加方法です：
 
 <LastedDependency groupId="p6spy" artifactId="p6spy" />
 
-## 配置
+## 設定
 
-接下来，需要在`application.yml`或`application.properties`中进行相应的配置。
+次に、`application.yml` または `application.properties` で適切な設定を行う必要があります。
 
 ### application.yml
 
@@ -43,66 +43,66 @@ spring:
   datasource:
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     url: jdbc:p6spy:h2:mem:test
-    # 其他数据库配置...
+    # その他のデータベース設定...
 ```
 
 ### spy.properties
 
-`p6spy`的配置文件`spy.properties`包含了多个配置项，以下是一些关键配置的示例：
+`p6spy` の設定ファイル `spy.properties` には複数の設定項目が含まれており、以下は主要な設定の例です：
 
 ```properties
-# 模块列表，根据版本选择合适的配置
+# モジュールリスト。バージョンに応じて適切な設定を選択
 modulelist=com.baomidou.mybatisplus.extension.p6spy.MybatisPlusLogFactory,com.p6spy.engine.outage.P6OutageFactory
 
-# 自定义日志格式
+# カスタムログフォーマット
 logMessageFormat=com.baomidou.mybatisplus.extension.p6spy.P6SpyLogger
 
-# 日志输出到控制台
+# ログをコンソールに出力
 appender=com.baomidou.mybatisplus.extension.p6spy.StdoutLogger
 
-# 取消JDBC驱动注册
+# JDBC ドライバーの登録を解除
 deregisterdrivers=true
 
-# 使用前缀
+# プレフィックスを使用
 useprefix=true
 
-# 排除的日志类别
+# 除外するログカテゴリ
 excludecategories=info,debug,result,commit,resultset
 
-# 日期格式
+# 日付フォーマット
 dateformat=yyyy-MM-dd HH:mm:ss
 
-# 实际驱动列表
+# 実際のドライバーリスト
 # driverlist=org.h2.Driver
 
-# 开启慢SQL记录
+# スロークエリの記録を有効化
 outagedetection=true
 
-# 慢SQL记录标准（单位：秒）
+# スロークエリの記録基準（単位：秒）
 outagedetectioninterval=2
 
-# 过滤 flw_ 开头的表 SQL 打印
+# flw_ で始まるテーブルのSQL出力をフィルタリング
 filter=true
 exclude=flw_*
 ```
 
-## Spring Boot集成
+## Spring Boot 統合
 
-对于Spring Boot项目，可以使用`p6spy-spring-boot-starter`来简化集成过程。
+Spring Boot プロジェクトでは、`p6spy-spring-boot-starter` を使用して統合プロセスを簡素化できます。
 
-### 依赖
+### 依存関係
 
 <LastedDependency groupId="com.github.gavlyukovskiy" artifactId="p6spy-spring-boot-starter" />
 
-### 配置
+### 設定
 
 ```yaml
 decorator:
   datasource:
     p6spy:
-      # 日志格式
+      # ログフォーマット
       log-format: "\ntime:%(executionTime) || sql:%(sql)\n"
-      # 自定义日志类
+      # カスタムログクラス
       logging: custom
       custom-appender-class: com.example.testinit.config.StdoutLogger
 ```
@@ -115,15 +115,15 @@ public class StdoutLogger extends com.p6spy.engine.spy.appender.StdoutLogger {
 }
 ```
 
-更多关于`p6spy-spring-boot-starter`的配置信息，请参考[GitHub](https://github.com/gavlyukovskiy/spring-boot-data-source-decorator)。
+`p6spy-spring-boot-starter` の設定に関する詳細情報については、[GitHub](https://github.com/gavlyukovskiy/spring-boot-data-source-decorator)を参照してください。
 
-## 注意事项
+## 注意事項
 
-- `driver-class-name`应配置为`p6spy`提供的驱动类。
-- `url`前缀应为`jdbc:p6spy`，后跟实际的数据库连接地址。
-- 如果打印的SQL为`null`，请在`excludecategories`中增加`commit`。
-- 如果批量操作不打印SQL，请去除`excludecategories`中的`batch`。
-- 对于批量操作打印重复的问题，请使用`MybatisPlusLogFactory`（3.2.1新增）。
-- 请注意，该插件可能会带来性能损耗，不建议在生产环境中使用。
+- `driver-class-name` は `p6spy` が提供するドライバークラスに設定する必要があります。
+- `url` のプレフィックスは `jdbc:p6spy` とし、その後に実際のデータベース接続アドレスを続けます。
+- 出力されるSQLが `null` の場合は、`excludecategories` に `commit` を追加してください。
+- バッチ操作でSQLが出力されない場合は、`excludecategories` から `batch` を削除してください。
+- バッチ操作でSQLが重複して出力される問題については、`MybatisPlusLogFactory` を使用してください（3.2.1で追加）。
+- このプラグインはパフォーマンスに影響を与える可能性があるため、本番環境での使用は推奨されません。
 
-通过以上步骤，你就可以在开发过程中方便地分析和打印SQL语句了。记得根据实际需要调整配置，以达到最佳的使用效果。
+上記の手順に従うことで、開発プロセスでSQLステートメントを簡単に分析し出力することができます。実際のニーズに応じて設定を調整し、最適な使用効果を得ることを忘れないでください。

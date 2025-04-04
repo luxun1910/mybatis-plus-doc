@@ -1,42 +1,42 @@
 ---
-title: 自定义ID生成器
+title: カスタムIDジェネレーター
 sidebar:
   order: 12
 ---
 
-MyBatis-Plus 提供了灵活的自定义ID生成器功能，允许开发者根据业务需求定制ID生成策略。从3.3.0版本开始，默认使用雪花算法结合不含中划线的UUID作为ID生成方式。
+MyBatis-Plus は柔軟なカスタムIDジェネレーター機能を提供し、開発者がビジネス要件に応じてID生成戦略をカスタマイズすることを可能にします。バージョン3.3.0以降、デフォルトではスノーフレークアルゴリズムとハイフンを含まないUUIDを組み合わせたID生成方式を使用しています。
 
-**MyBatis-Plus自带主键生成策略对比**
+**MyBatis-Plus の組み込み主キー生成戦略の比較**
 
-| 方法     | 主键生成策略       | 主键类型            | 说明                                                                                                            |
-| -------- | ------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------- |
-| nextId   | ASSIGN_ID          | Long,Integer,String | 支持自动转换为String类型，但数值类型不支持自动转换，需精准匹配，例如返回Long，实体主键就不支持定义为Integer |
-| nextUUID | ASSIGN_UUID        | String              | 默认不含中划线的UUID生成        |
+| メソッド   | 主キー生成戦略 | 主キータイプ        | 説明                                                                                                            |
+| ---------- | -------------- | ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| nextId     | ASSIGN_ID      | Long,Integer,String | String型への自動変換をサポートしますが、数値型は自動変換をサポートせず、正確な一致が必要です。例：Longを返す場合、エンティティの主キーはIntegerとして定義できません |
+| nextUUID   | ASSIGN_UUID    | String             | デフォルトでハイフンを含まないUUIDを生成します |
 
-## 如何自定义
+## カスタマイズ方法
 
-MyBatis-Plus 提供了多种方式来实现自定义ID生成器，以下是一些示例工程和配置方法。
+MyBatis-Plus は、カスタムIDジェネレーターを実装するための複数の方法を提供しています。以下にいくつかのサンプルプロジェクトと設定方法を示します。
 
-### Spring Boot 集成
+### Spring Boot 統合
 
-#### 方式一：声明为Bean供Spring扫描注入
+#### 方法1：Beanとして宣言しSpringにスキャンさせる
 
 ```java
 @Component
 public class CustomIdGenerator implements IdentifierGenerator {
     @Override
     public Long nextId(Object entity) {
-        // 使用实体类名作为业务键，或者提取参数生成业务键
+        // エンティティクラス名をビジネスキーとして使用するか、パラメータからビジネスキーを抽出
         String bizKey = entity.getClass().getName();
-        // 根据业务键调用分布式ID生成服务
-        long id = ...; // 调用分布式ID生成逻辑
-        // 返回生成的ID值
+        // ビジネスキーに基づいて分散ID生成サービスを呼び出し
+        long id = ...; // 分散ID生成ロジックを呼び出し
+        // 生成されたID値を返す
         return id;
     }
 }
 ```
 
-#### 方式二：使用配置类
+#### 方法2：設定クラスを使用
 
 ```java
 @Bean
@@ -45,7 +45,7 @@ public IdentifierGenerator idGenerator() {
 }
 ```
 
-#### 方式三：通过MybatisPlusPropertiesCustomizer自定义
+#### 方法3：MybatisPlusPropertiesCustomizerでカスタマイズ
 
 ```java
 @Bean
@@ -54,9 +54,9 @@ public MybatisPlusPropertiesCustomizer plusPropertiesCustomizer() {
 }
 ```
 
-### Spring 集成
+### Spring 統合
 
-#### 方式一：XML配置
+#### 方法1：XML設定
 
 ```xml
 <bean name="customIdGenerator" class="com.example.CustomIdGenerator"/>
@@ -65,7 +65,7 @@ public MybatisPlusPropertiesCustomizer plusPropertiesCustomizer() {
 </bean>
 ```
 
-#### 方式二：注解配置
+#### 方法2：アノテーション設定
 
 ```java
 @Bean
@@ -76,8 +76,8 @@ public GlobalConfig globalConfig() {
 }
 ```
 
-## 与KeyGenerator的差异
+## KeyGeneratorとの違い
 
-MyBatis-Plus的`IdentifierGenerator`主要用于生成数据库表的主键ID，而`KeyGenerator`是MyBatis框架中的一个接口，用于在执行SQL语句时生成键值，通常用于生成自增主键或者在执行INSERT语句后获取新生成的ID。
+MyBatis-Plus の `IdentifierGenerator` は主にデータベーステーブルの主キーIDを生成するために使用されます。一方、`KeyGenerator` はMyBatisフレームワークのインターフェースで、SQLステートメントの実行時にキー値を生成するために使用されます。通常、自動インクリメント主キーの生成やINSERTステートメント実行後に新しく生成されたIDを取得する場合に使用されます。
 
-`IdentifierGenerator`更加专注于主键ID的生成，而`KeyGenerator`则更加通用，可以用于多种键值生成场景。在使用MyBatis-Plus时，通常推荐使用`IdentifierGenerator`来生成主键ID，因为它与MyBatis-Plus的集成更加紧密，提供了更多的便利性和功能。
+`IdentifierGenerator` は主キーIDの生成に特化しています。一方、`KeyGenerator` はより汎用的で、様々なキー値生成シナリオに使用できます。MyBatis-Plus を使用する場合、通常は `IdentifierGenerator` を使用して主キーIDを生成することを推奨します。MyBatis-Plus との統合がより密接で、より多くの利便性と機能を提供しているためです。

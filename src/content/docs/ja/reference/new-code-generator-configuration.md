@@ -1,83 +1,83 @@
 ---
-title: 代码生成器配置
+title: コードジェネレータの設定
 sidebar:
   order: 3
   badge:
     text: New
 ---
 
-MyBatis-Plus 全新代码生成器在继承原有功能的基础上，引入了更加灵活和高效的 builder 模式，使得开发者能够快速生成符合需求的代码，同时保持代码的优雅和整洁。这个新特性旨在进一步提升开发效率，减少重复劳动，让开发者能够更加专注于业务逻辑的实现。
+MyBatis-Plus の新しいコードジェネレータは、既存の機能を継承しつつ、より柔軟で効率的なビルダーパターンを導入し、開発者が要件に合ったコードを迅速に生成できるようにしながら、コードの優雅さと読みやすさを維持できるようにしました。この新機能は、開発効率をさらに向上させ、重複作業を減らし、開発者がビジネスロジックの実装により集中できるようにすることを目的としています。
 
-### 特点说明
+### 特徴
 
-1. **Builder 模式**：通过 builder 模式，开发者可以链式调用配置方法，直观地构建代码生成器的配置，使得代码更加清晰易读。
+1. **ビルダーパターン**：ビルダーパターンを通じて、開発者は設定メソッドをチェーン式に呼び出し、コードジェネレータの設定を直感的に構築でき、コードがより明確で読みやすくなります。
 
-2. **快速配置**：新代码生成器提供了快速配置选项，如全局配置、包配置、策略配置等，可以一键设置常用选项，快速启动代码生成过程。
+2. **クイック設定**：新しいコードジェネレータは、グローバル設定、パッケージ設定、戦略設定などのクイック設定オプションを提供し、一般的なオプションをワンクリックで設定でき、コード生成プロセスを迅速に開始できます。
 
-3. **模板引擎**：支持 Freemarker 等模板引擎，允许开发者自定义代码模板，以生成符合项目特定风格的代码。
+3. **テンプレートエンジン**：Freemarker などのテンプレートエンジンをサポートし、開発者がプロジェクト固有のスタイルに合わせてコードテンプレートをカスタマイズできます。
 
-4. **Lombok 集成**：新代码生成器默认启用 Lombok，减少了样板代码的编写，提高了代码的可读性和维护性。
+4. **Lombok 統合**：新しいコードジェネレータはデフォルトで Lombok を有効にし、ボイラープレートコードの記述を減らし、コードの可読性とメンテナンス性を向上させます。
 
-5. **多数据库支持**：支持多种数据库类型，如 MySQL、Oracle、SQL Server 等，只需配置相应的数据库连接信息即可。
+5. **複数データベースサポート**：MySQL、Oracle、SQL Server などの複数のデータベースタイプをサポートし、対応するデータベース接続情報を設定するだけで使用できます。
 
-6. **灵活的数据源配置**：提供了丰富的数据源配置选项，包括数据库查询方式、类型转换器、关键字处理器等，满足不同数据库的需求。
+6. **柔軟なデータソース設定**：データベースクエリ方式、型変換器、キーワードハンドラーなど、豊富なデータソース設定オプションを提供し、異なるデータベースのニーズを満たします。
 
-### 示例配置
+### 設定例
 
 ```java
-// 使用 FastAutoGenerator 快速配置代码生成器
+// FastAutoGenerator を使用してコードジェネレータをクイック設定
 FastAutoGenerator.create("jdbc:mysql://localhost:3306/mybatis_plus?serverTimezone=GMT%2B8", "root", "password")
     .globalConfig(builder -> {
-        builder.author("Your Name") // 设置作者
-            .outputDir("src/main/java"); // 输出目录
+        builder.author("Your Name") // 作者を設定
+            .outputDir("src/main/java"); // 出力ディレクトリ
     })
     .packageConfig(builder -> {
-        builder.parent("com.example") // 设置父包名
-            .entity("model") // 设置实体类包名
-            .mapper("dao") // 设置 Mapper 接口包名
-            .service("service") // 设置 Service 接口包名
-            .serviceImpl("service.impl") // 设置 Service 实现类包名
-            .xml("mappers"); // 设置 Mapper XML 文件包名
+        builder.parent("com.example") // 親パッケージ名を設定
+            .entity("model") // エンティティクラスのパッケージ名を設定
+            .mapper("dao") // Mapper インターフェースのパッケージ名を設定
+            .service("service") // Service インターフェースのパッケージ名を設定
+            .serviceImpl("service.impl") // Service 実装クラスのパッケージ名を設定
+            .xml("mappers"); // Mapper XML ファイルのパッケージ名を設定
     })
     .strategyConfig(builder -> {
-        builder.addInclude("table1", "table2") // 设置需要生成的表名
+        builder.addInclude("table1", "table2") // 生成対象のテーブル名を設定
             .entityBuilder()
-            .enableLombok() // 启用 Lombok
-            .enableTableFieldAnnotation() // 启用字段注解
+            .enableLombok() // Lombok を有効化
+            .enableTableFieldAnnotation() // フィールドアノテーションを有効化
             .controllerBuilder()
-            .enableRestStyle(); // 启用 REST 风格
+            .enableRestStyle(); // REST スタイルを有効化
     })
-    .templateEngine(new FreemarkerTemplateEngine()) // 使用 Freemarker 模板引擎
-    .execute(); // 执行生成
+    .templateEngine(new FreemarkerTemplateEngine()) // Freemarker テンプレートエンジンを使用
+    .execute(); // 生成を実行
 ```
 
-### 数据库配置 (DataSourceConfig)
+### データベース設定 (DataSourceConfig)
 
-#### 基础配置
+#### 基本設定
 
-| 属性     | 说明       | 示例                                     |
+| 属性     | 説明       | 例                                     |
 | -------- | ---------- | ---------------------------------------- |
-| url      | jdbc 路径  | jdbc:mysql://127.0.0.1:3306/mybatis-plus |
-| username | 数据库账号 | root                                     |
-| password | 数据库密码 | 123456                                   |
+| url      | jdbc パス  | jdbc:mysql://127.0.0.1:3306/mybatis-plus |
+| username | データベースアカウント | root                                     |
+| password | データベースパスワード | 123456                                   |
 
 ```java
 DataSourceConfig dataSourceConfig = new DataSourceConfig.Builder("jdbc:mysql://127.0.0.1:3306/mybatis-plus", "root", "123456").build();
 ```
 
-#### 可选配置
+#### オプション設定
 
-| 方法                                      | 说明                          | 示例                                                        |
+| メソッド                                      | 説明                          | 例                                                        |
 | ----------------------------------------- | ----------------------------- | ----------------------------------------------------------- |
-| dbQuery(IDbQuery)                         | 数据库查询                    | new MySqlQuery(),只在SQLQuery下生效                         |
-| schema(String)                            | 数据库 schema(部分数据库适用) | mybatis-plus                                                |
-| typeConvert(ITypeConvert)                 | 数据库类型转换器              | new MySqlTypeConvert(),只在SQLQuery下生效                   |
-| keyWordsHandler(IKeyWordsHandler)         | 数据库关键字处理器            | new MySqlKeyWordsHandler()                                  |
-| typeConvertHandler(ITypeConvertHandler)   | 类型转换器(默认)              | 自定义实现ITypeConvertHandler,只在DefaultQuery下生效        |
-| databaseQueryClass(AbstractDatabaseQuery) | 数据库查询方式                | 默认DefaultQuery.class(通用元数据), SQLQuery.class(SQL查询) |
+| dbQuery(IDbQuery)                         | データベースクエリ                    | new MySqlQuery(),SQLQuery でのみ有効                         |
+| schema(String)                            | データベース schema(一部のデータベースで適用) | mybatis-plus                                                |
+| typeConvert(ITypeConvert)                 | データベース型変換器              | new MySqlTypeConvert(),SQLQuery でのみ有効                   |
+| keyWordsHandler(IKeyWordsHandler)         | データベースキーワードハンドラー            | new MySqlKeyWordsHandler()                                  |
+| typeConvertHandler(ITypeConvertHandler)   | 型変換ハンドラー(デフォルト)              | ITypeConvertHandler の独自実装,DefaultQuery でのみ有効        |
+| databaseQueryClass(AbstractDatabaseQuery) | データベースクエリ方式                | デフォルト DefaultQuery.class(汎用メタデータ), SQLQuery.class(SQL クエリ) |
 
 ```java
-// 使用SQL查询的方式生成代码,属于旧的代码生成方式,通用性不是好,老的代码可以继续使用,适配数据库需要完成dbQuery和typeConvert的扩展,后期不再维护这种方式
+// SQL クエリ方式でコードを生成する場合（旧方式で、汎用性は高くありません。既存のコードは引き続き使用できますが、データベースへの適応には dbQuery と typeConvert の拡張が必要です。この方式は今後メンテナンスされません）
 DataSourceConfig dataSourceConfig = new DataSourceConfig.Builder("jdbc:mysql://127.0.0.1:3306/mybatis-plus", "root", "123456")
     .dbQuery(new MySqlQuery())
     .schema("mybatis-plus")
@@ -86,98 +86,97 @@ DataSourceConfig dataSourceConfig = new DataSourceConfig.Builder("jdbc:mysql://1
     .databaseQueryClass(SQLQuery.class)
     .build();
 
-// 使用元数据查询的方式生成代码,默认已经根据jdbcType来适配java类型,支持使用typeConvertHandler来转换需要映射的类型映射
+// メタデータクエリ方式でコードを生成する場合（デフォルトで jdbcType に基づいて Java 型を適応し、typeConvertHandler を使用してマッピングが必要な型の変換をサポートします）
 DataSourceConfig dataSourceConfig = new DataSourceConfig.Builder("jdbc:mysql://127.0.0.1:3306/mybatis-plus", "root", "123456")
     .schema("mybatis-plus")
     .keyWordsHandler(new MySqlKeyWordsHandler())
     .build();
 ```
 
+## グローバル設定 (GlobalConfig)
 
-## 全局配置 (GlobalConfig)
+グローバル設定は、コードジェネレータの全体的な動作を設定するためのもので、出力ディレクトリ、作者情報、Kotlin モード、Swagger 統合、日時型の戦略などが含まれます。
 
-全局配置提供了对代码生成器整体行为的设置，包括输出目录、作者信息、Kotlin 模式、Swagger 集成、时间类型策略等。
+### メソッド説明
 
-### 方法说明
-
-| 方法                      | 说明                                 | 示例                                                    |
+| メソッド                      | 説明                                 | 例                                                    |
 | ------------------------- | ------------------------------------ | ------------------------------------------------------- |
-| disableOpenDir()          | 禁止自动打开输出目录                 | 默认值: `true`                                          |
-| outputDir(String)         | 指定代码生成的输出目录               | `/opt/baomidou` 默认值: Windows: `D://` Linux/Mac: `/tmp` |
-| author(String)            | 设置作者名                           | `baomidou` 默认值: 配置文件中的作者名                   |
-| enableKotlin()            | 开启 Kotlin 模式                     | 默认值: `false`                                         |
-| enableSwagger()           | 开启 Swagger 模式                    | 默认值: `false`                                         |
-| dateType(DateType)        | 设置时间类型策略                     | `DateType.ONLY_DATE` 默认值: `DateType.TIME_PACK`       |
-| commentDate(String)       | 设置注释日期格式                     | 默认值: `yyyy-MM-dd`                                    |
+| disableOpenDir()          | 出力ディレクトリの自動オープンを無効化                 | デフォルト値: `true`                                          |
+| outputDir(String)         | コード生成の出力ディレクトリを指定               | `/opt/baomidou` デフォルト値: Windows: `D://` Linux/Mac: `/tmp` |
+| author(String)            | 作者名を設定                           | `baomidou` デフォルト値: 設定ファイルの作者名                   |
+| enableKotlin()            | Kotlin モードを有効化                     | デフォルト値: `false`                                         |
+| enableSwagger()           | Swagger モードを有効化                    | デフォルト値: `false`                                         |
+| dateType(DateType)        | 日時型の戦略を設定                     | `DateType.ONLY_DATE` デフォルト値: `DateType.TIME_PACK`       |
+| commentDate(String)       | コメントの日付フォーマットを設定                     | デフォルト値: `yyyy-MM-dd`                                    |
 
-### 示例配置
+### 設定例
 
 ```java
 GlobalConfig globalConfig = new GlobalConfig.Builder()
-    .disableOpenDir(false) // 允许自动打开输出目录
-    .outputDir("/path/to/output") // 设置输出目录
-    .author("Your Name") // 设置作者名
-    .enableKotlin(true) // 开启 Kotlin 模式
-    .enableSwagger(true) // 开启 Swagger 模式
-    .dateType(DateType.ONLY_DATE) // 设置时间类型策略
-    .commentDate("yyyy-MM-dd") // 设置注释日期格式
+    .disableOpenDir(false) // 出力ディレクトリの自動オープンを許可
+    .outputDir("/path/to/output") // 出力ディレクトリを設定
+    .author("Your Name") // 作者名を設定
+    .enableKotlin(true) // Kotlin モードを有効化
+    .enableSwagger(true) // Swagger モードを有効化
+    .dateType(DateType.ONLY_DATE) // 日時型の戦略を設定
+    .commentDate("yyyy-MM-dd") // コメントの日付フォーマットを設定
     .build();
 ```
 
-## 包配置 (PackageConfig)
+## パッケージ設定 (PackageConfig)
 
-包配置用于定义生成代码的包结构，包括父包名、模块名、实体类包名、服务层包名等。
+パッケージ設定は、生成されるコードのパッケージ構造を定義するために使用され、親パッケージ名、モジュール名、エンティティクラスのパッケージ名、サービス層のパッケージ名などが含まれます。
 
-### 方法说明
+### メソッド説明
 
-| 方法                              | 说明              | 示例                                                   |
+| メソッド                              | 説明              | 例                                                   |
 | --------------------------------- | ----------------- | ------------------------------------------------------ |
-| parent(String)                    | 设置父包名        | 默认值: `com.baomidou`                                 |
-| moduleName(String)                | 设置父包模块名    | 默认值: 无                                             |
-| entity(String)                    | 设置 Entity 包名  | 默认值: `entity`                                       |
-| service(String)                   | 设置 Service 包名 | 默认值: `service`                                      |
-| serviceImpl(String)               | 设置 Service Impl 包名 | 默认值: `service.impl`                                 |
-| mapper(String)                    | 设置 Mapper 包名  | 默认值: `mapper`                                       |
-| xml(String)                       | 设置 Mapper XML 包名 | 默认值: `mapper.xml`                                   |
-| controller(String)                | 设置 Controller 包名 | 默认值: `controller`                                   |
-| pathInfo(Map<OutputFile, String>) | 设置路径配置信息  | `Collections.singletonMap(OutputFile.mapperXml, "D://")` |
+| parent(String)                    | 親パッケージ名を設定        | デフォルト値: `com.baomidou`                                 |
+| moduleName(String)                | 親パッケージのモジュール名を設定    | デフォルト値: なし                                             |
+| entity(String)                    | Entity パッケージ名を設定  | デフォルト値: `entity`                                       |
+| service(String)                   | Service パッケージ名を設定 | デフォルト値: `service`                                      |
+| serviceImpl(String)               | Service 実装クラスのパッケージ名を設定 | デフォルト値: `service.impl`                                 |
+| mapper(String)                    | Mapper パッケージ名を設定  | デフォルト値: `mapper`                                       |
+| xml(String)                       | Mapper XML パッケージ名を設定 | デフォルト値: `mapper.xml`                                   |
+| controller(String)                | Controller パッケージ名を設定 | デフォルト値: `controller`                                   |
+| pathInfo(Map<OutputFile, String>) | パス設定情報を設定  | `Collections.singletonMap(OutputFile.mapperXml, "D://")` |
 
-### 示例配置
+### 設定例
 
 ```java
 PackageConfig packageConfig = new PackageConfig.Builder()
-    .parent("com.example") // 设置父包名
-    .moduleName("myapp") // 设置父包模块名
-    .entity("model") // 设置 Entity 包名
-    .service("service") // 设置 Service 包名
-    .serviceImpl("service.impl") // 设置 Service Impl 包名
-    .mapper("dao") // 设置 Mapper 包名
-    .xml("mappers") // 设置 Mapper XML 包名
-    .controller("controller") // 设置 Controller 包名
-    .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "/path/to/xml")) // 设置路径配置信息
+    .parent("com.example") // 親パッケージ名を設定
+    .moduleName("myapp") // 親パッケージのモジュール名を設定
+    .entity("model") // Entity パッケージ名を設定
+    .service("service") // Service パッケージ名を設定
+    .serviceImpl("service.impl") // Service 実装クラスのパッケージ名を設定
+    .mapper("dao") // Mapper パッケージ名を設定
+    .xml("mappers") // Mapper XML パッケージ名を設定
+    .controller("controller") // Controller パッケージ名を設定
+    .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "/path/to/xml")) // パス設定情報を設定
     .build();
 ```
 
-## 模板配置 (TemplateConfig)
+## テンプレート設定 (TemplateConfig)
 
-注意：自 MyBatis-Plus 3.5.6 版本开始，模板配置已迁移至 `StrategyConfig` 中。以下是迁移后的配置方式。
+注意：MyBatis-Plus 3.5.6 バージョンから、テンプレート設定は `StrategyConfig` に移行されました。以下は移行後の設定方法です。
 
-### 方法说明
+### メソッド説明
 
-| 方法                                                         | 说明                | 示例                                                                                           |
+| メソッド                                                         | 説明                | 例                                                                                           |
 | ------------------------------------------------------------ | ------------------- |----------------------------------------------------------------------------------------------|
-| entityBuilder()                                              | 设置实体类模板      |                                                                                              |
-| javaTemplate(String)                                         | 设置 Java 实体模板  | `/templates/entity.java`                                                                     |
-| disable()                                                    | 禁用实体类生成      |                                                                                              |
-| serviceBuilder()                                             | 设置 Service 层模板 |                                                                                              |
-| disableService()                                             | 禁用 Service 层生成 |                                                                                              |
-| serviceTemplate(String)                                      | 设置 Service 模板   | `/templates/service.java`                                                                    |
-| serviceImplTemplate(String)                                  | 设置 ServiceImpl 模板| `/templates/serviceImpl.java`                                                               |
+| entityBuilder()                                              | エンティティクラスのテンプレートを設定      |                                                                                              |
+| javaTemplate(String)                                         | Java エンティティのテンプレートを設定  | `/templates/entity.java`                                                                     |
+| disable()                                                    | エンティティクラスの生成を無効化      |                                                                                              |
+| serviceBuilder()                                             | Service 層のテンプレートを設定 |                                                                                              |
+| disableService()                                             | Service 層の生成を無効化 |                                                                                              |
+| serviceTemplate(String)                                      | Service テンプレートを設定   | `/templates/service.java`                                                                    |
+| serviceImplTemplate(String)                                  | ServiceImpl テンプレートを設定| `/templates/serviceImpl.java`                                                               |
 
-### 示例配置
+### 設定例
 
 ```java
-// 3.5.6 之前的配置示例
+// 3.5.6 より前の設定例
 TemplateConfig templateConfig = new TemplateConfig.Builder()
     .disable(TemplateType.ENTITY)
     .entity("/templates/entity.java")
@@ -188,125 +187,125 @@ TemplateConfig templateConfig = new TemplateConfig.Builder()
     .controller("/templates/controller.java")
     .build();
 
-// 3.5.6 之后的配置示例
+// 3.5.6 以降の設定例
 StrategyConfig strategyConfig = new StrategyConfig.Builder()
     .entityBuilder()
-    .javaTemplate("/templates/entity.java") // 设置实体类模板
-    .disable() // 禁用实体类生成
+    .javaTemplate("/templates/entity.java") // エンティティクラスのテンプレートを設定
+    .disable() // エンティティクラスの生成を無効化
     .serviceBuilder()
-    .disableService() // 禁用 Service 层生成
-    .serviceTemplate("/templates/service.java") // 设置 Service 模板
-    .serviceImplTemplate("/templates/serviceImpl.java") // 设置 ServiceImpl 模板
+    .disableService() // Service 層の生成を無効化
+    .serviceTemplate("/templates/service.java") // Service テンプレートを設定
+    .serviceImplTemplate("/templates/serviceImpl.java") // ServiceImpl テンプレートを設定
     .build();
 ```
 
-## 注入配置 (InjectionConfig)
+## 注入設定 (InjectionConfig)
 
-注入配置允许开发者自定义代码生成器的行为，包括在输出文件之前执行的逻辑、自定义配置 Map 对象、自定义配置模板文件等。
+注入設定は、開発者がコードジェネレータの動作をカスタマイズするために使用され、ファイル出力の前に実行されるロジック、カスタム設定 Map オブジェクト、カスタム設定テンプレートファイルなどが含まれます。
 
-### 方法说明
+### メソッド説明
 
-| 方法                                                         | 说明                | 示例                                                                                           |
+| メソッド                                                         | 説明                | 例                                                                                           |
 | ------------------------------------------------------------ | ------------------- |----------------------------------------------------------------------------------------------|
-| beforeOutputFile(BiConsumer<TableInfo, Map<String, Object>>) | 输出文件之前执行的逻辑 | 在生成文件之前执行自定义逻辑，如打印表信息或修改配置数据                                     |
-| customMap(Map<String, Object>)                               | 自定义配置 Map 对象 | 用于在模板中访问自定义的配置信息，如项目名称、作者等                                         |
-| customFile(Map<String, String>)                              | 自定义配置模板文件  | 用于指定自定义的模板文件路径，可以格式化文件名，参考测试用例 H2CodeGeneratorTest.testCustomFileByList |
+| beforeOutputFile(BiConsumer<TableInfo, Map<String, Object>>) | ファイル出力の前に実行されるロジック | ファイル生成前にカスタムロジックを実行します（例：テーブル情報の出力、設定データ変更）                                     |
+| customMap(Map<String, Object>)                               | カスタム設定 Map オブジェクト | テンプレート内でカスタム設定情報（プロジェクト名、作者など）にアクセスするために使用されます                                         |
+| customFile(Map<String, String>)                              | カスタム設定テンプレートファイル  | カスタムテンプレートファイルのパスを指定するのに使用され、ファイル名をフォーマットできます。テストケース H2CodeGeneratorTest.testCustomFileByList を参照 |
 
-### 示例配置
+### 設定例
 
 ```java
 InjectionConfig injectionConfig = new InjectionConfig.Builder()
     .beforeOutputFile((tableInfo, objectMap) -> {
-        System.out.println("准备生成文件: " + tableInfo.getEntityName());
-        // 可以在这里添加自定义逻辑，如修改 objectMap 中的配置
+        System.out.println("生成ファイルを準備: " + tableInfo.getEntityName());
+        // ここにカスタムロジックを追加できます。例えば、objectMap の設定を変更することができます
     })
     .customMap(Collections.singletonMap("projectName", "MyBatis-Plus Generator"))
     .customFile(Collections.singletonMap("custom.txt", "/templates/custom.vm"))
     .build();
 ```
 
-通过上述配置，开发者可以根据自己的需求，灵活地定制代码生成器的行为。例如，在生成文件之前执行特定的逻辑，或者使用自定义的模板文件来生成代码。这些配置选项提供了极大的灵活性，使得 MyBatis-Plus 代码生成器能够适应各种复杂的项目需求。
+上記の設定により、開発者は要件に基づいて、コードジェネレータの動作を柔軟にカスタマイズできます。例えば、ファイル生成の前に特定のロジックを実行したり、カスタムテンプレートファイルを使用してコードを生成したりすることができます。これらの設定オプションは、MyBatis-Plus コードジェネレータが多様で複雑なプロジェクト要件に適応するための大きな柔軟性を提供します。
 
-## 策略配置 (StrategyConfig)
+## 戦略設定 (StrategyConfig)
 
-策略配置是 MyBatis-Plus 代码生成器的核心部分，它允许开发者根据项目需求定制代码生成的规则，包括命名模式、表和字段的过滤、以及各个代码模块的生成策略。
+戦略設定は MyBatis-Plus コードジェネレータの核心部分であり、開発者がプロジェクトの要件に基づいてコード生成のルールをカスタマイズできるようにするもので、命名パターン、テーブルとフィールドのフィルタリング、および各コードモジュールの生成戦略を含みます。
 
-### 方法说明
+### メソッド説明
 
-| 方法                        | 说明             | 示例                                                        |
+| メソッド                        | 説明             | 例                                                        |
 |---------------------------|----------------|-----------------------------------------------------------|
-| enableCapitalMode         | 开启大写命名         | 默认值: `false`                                                 |
-| enableSkipView            | 开启跳过视图         | 默认值: `false`                                                 |
-| disableSqlFilter          | 禁用 SQL 过滤      | 默认值: `true`，如果 SQL 过滤不支持，可以关闭此选项                     |
-| enableSchema              | 启用 schema      | 默认值: `false`，多 schema 场景时启用                                |
-| likeTable(LikeTable)      | 模糊表匹配(SQL 过滤)  | 与 `notLikeTable` 互斥，只能配置一项                           |
-| notLikeTable(LikeTable)   | 模糊表排除(SQL 过滤)  | 与 `likeTable` 互斥，只能配置一项                           |
-| addInclude(String...)     | 增加表匹配(内存过滤)    | 与 `addExclude` 互斥，只能配置一项，支持正则匹配，如 `^t_.*` 匹配所有以 `t_` 开头的表名 |
-| addExclude(String...)     | 增加表排除匹配(内存过滤)  | 与 `addInclude` 互斥，只能配置一项，支持正则匹配，如 `.*st$` 匹配所有以 `st` 结尾的表名 |
-| addTablePrefix(String...) | 增加过滤表前缀        |                                                           |
-| addTableSuffix(String...) | 增加过滤表后缀        |                                                           |
-| addFieldPrefix(String...) | 增加过滤字段前缀       |                                                           |
-| addFieldSuffix(String...) | 增加过滤字段后缀       |                                                           |
-| outputFile                | 内置模板输出文件处理   | 参考测试用例 `H2CodeGeneratorTest.testOutputFile`                |
-| entityBuilder             | 实体策略配置         |                                                           |
-| controllerBuilder         | Controller 策略配置 |                                                           |
-| mapperBuilder             | Mapper 策略配置    |                                                           |
-| serviceBuilder            | Service 策略配置   |                                                           |
+| enableCapitalMode         | 大文字命名を有効化         | デフォルト値: `false`                                                 |
+| enableSkipView            | スキップビューを有効化         | デフォルト値: `false`                                                 |
+| disableSqlFilter          | SQL フィルタを無効化      | デフォルト値: `true`，SQL フィルタがサポートされていない場合はこのオプションを無効にできます                     |
+| enableSchema              | schema を有効化      | デフォルト値: `false`，多 schema シナリオ時に有効化することができます                                |
+| likeTable(LikeTable)      | テーブル名のあいまいマッチング（SQL フィルタリング）  | `notLikeTable` とどちらか1つしか設定できません                           |
+| notLikeTable(LikeTable)   | テーブル名のあいまい除外（SQL フィルタリング）  | `likeTable` とどちらか1つしか設定できません                           |
+| addInclude(String...)     | テーブル名のマッチングを追加 (メモリフィルタリング)    | `addExclude` とどちらか1つしか設定できません。正規表現マッチングをサポートし、例えば `^t_.*` はすべての `t_` で始まるテーブル名に一致します |
+| addExclude(String...)     | テーブル名の除外マッチングを追加 (メモリフィルタリング)  | `addInclude` とどちらか1つしか設定できません。正規表現マッチングをサポートし、例えば `.*st$` はすべての `st` で終わるテーブル名に一致します |
+| addTablePrefix(String...) | テーブル名のフィルタ用プレフィックスを追加        |                                                           |
+| addTableSuffix(String...) | テーブル名のフィルタ用サフィックスを追加        |                                                           |
+| addFieldPrefix(String...) | フィールド名のフィルタ用プレフィックスを追加       |                                                           |
+| addFieldSuffix(String...) | フィールド名のフィルタ用サフィックスを追加       |                                                           |
+| outputFile                | 組み込みテンプレート出力ファイル処理   | テストケース H2CodeGeneratorTest.testOutputFile を参照                |
+| entityBuilder             | エンティティ戦略設定         |                                                           |
+| controllerBuilder         | Controller 戦略設定 |                                                           |
+| mapperBuilder             | Mapper 戦略設定    |                                                           |
+| serviceBuilder            | Service 戦略設定   |                                                           |
 
-### 示例配置
+### 設定例
 
 ```java
 StrategyConfig strategyConfig = new StrategyConfig.Builder()
-    .enableCapitalMode() // 开启大写命名
-    .enableSkipView() // 开启跳过视图
-    .disableSqlFilter() // 禁用 SQL 过滤
-    .likeTable(new LikeTable("USER")) // 模糊匹配表名
-    .addInclude("t_simple") // 增加表匹配
-    .addTablePrefix("t_", "c_") // 增加过滤表前缀
-    .addFieldSuffix("_flag") // 增加过滤字段后缀
+    .enableCapitalMode() // 大文字命名を有効化
+    .enableSkipView() // スキップビューを有効化
+    .disableSqlFilter() // SQL フィルタを無効化
+    .likeTable(new LikeTable("USER")) // テーブル名のあいまいマッチング
+    .addInclude("t_simple") // テーブル名のマッチングを追加
+    .addTablePrefix("t_", "c_") // テーブル名のフィルタ用プレフィックスを追加
+    .addFieldSuffix("_flag") // テーブル名のフィルタ用サフィックスを追加
     .build();
 ```
 
-### Entity 策略配置
+### Entity 戦略設定
 
-实体策略配置用于定制实体类的生成规则，包括父类、序列化版本 UID、文件覆盖、字段常量、链式模型、Lombok 模型等。
+Entity 戦略設定は、エンティティクラスの生成ルールをカスタマイズするために使用され、親クラス、シリアルバージョン UID、ファイルオーバーライド、フィールド定数、チェーンモデル、Lombok モデルなどが含まれます。
 
-#### 方法说明
+#### メソッド説明
 
-| 方法                                        | 说明                              | 示例                                                         |
+| メソッド                                        | 説明                              | 例                                                         |
 | ------------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
-| nameConvert(INameConvert)                   | 名称转换实现                      |                                                              |
-| superClass(Class<?>)                        | 设置父类                          | `BaseEntity.class`                                           |
-| superClass(String)                          | 设置父类                          | `com.baomidou.global.BaseEntity`                             |
-| disableSerialVersionUID                     | 禁用生成 serialVersionUID         | 默认值: `true`                                               |
-| enableFileOverride                          | 覆盖已生成文件                    | 默认值: `false`                                              |
-| enableColumnConstant                        | 开启生成字段常量                  | 默认值: `false`                                              |
-| enableChainModel                            | 开启链式模型                      | 默认值: `false`                                              |
-| enableLombok                                | 开启 Lombok 模型                  | 默认值: `false`  默认只有Getter,Setter,自3.5.10后增加ToString |
-| enableRemoveIsPrefix                        | 开启 Boolean 类型字段移除 is 前缀 | 默认值: `false`                                              |
-| enableTableFieldAnnotation                  | 开启生成实体时生成字段注解        | 默认值: `false`                                              |
-| enableActiveRecord                          | 开启 ActiveRecord 模型            | 默认值: `false`                                              |
-| versionColumnName(String)                   | 乐观锁字段名(数据库字段)          | `versionColumnName` 与 `versionPropertyName` 二选一即可      |
-| versionPropertyName(String)                 | 乐观锁属性名(实体)                | `versionColumnName` 与 `versionPropertyName` 二选一即可      |
-| logicDeleteColumnName(String)               | 逻辑删除字段名(数据库字段)        | `logicDeleteColumnName` 与 `logicDeletePropertyName` 二选一即可 |
-| logicDeletePropertyName(String)             | 逻辑删除属性名(实体)              | `logicDeleteColumnName` 与 `logicDeletePropertyName` 二选一即可 |
-| naming                                      | 数据库表映射到实体的命名策略      | 默认下划线转驼峰命名: `NamingStrategy.underline_to_camel`    |
-| columnNaming                                | 数据库表字段映射到实体的命名策略  | 默认为 `null`，未指定按照 `naming` 执行                      |
-| addSuperEntityColumns(String...)            | 添加父类公共字段                  |                                                              |
-| addIgnoreColumns(String...)                 | 添加忽略字段                      |                                                              |
-| addTableFills(IFill...)                     | 添加表字段填充                    |                                                              |
-| addTableFills(List<IFill\>)                 | 添加表字段填充                    |                                                              |
-| idType(IdType)                              | 全局主键类型                      |                                                              |
-| convertFileName(ConverterFileName)          | 转换文件名称                      |                                                              |
-| formatFileName(String)                      | 格式化文件名称                    |                                                              |
-| toString(boolean)                           | 是否生成ToString方法              | 默认为true, 自3.5.10开始                                     |
-| fieldUseJavaDoc                             | 启用字段文档注释                  | 默认为true, 自3.5.10开始                                     |
-| classAnnotations(ClassAnnotationAttributes) | 添加实体类注解                    | 自3.5.10开始                                                 |
-| tableAnnotationHandler                      | 表注解处理器                      | 自3.5.10开始                                                 |
-| tableFieldAnnotationHandler                 | 字段注解处理器                    | 自3.5.10开始                                                 |
-| enableLombok(ClassAnnotationAttributes...)  | 开启 Lombok 模型并设置Lombok注解  | 自3.5.10开始.   使用@Data示例: enableLombok(new ClassAnnotationAttributes("@Data","lombok.Data")) |
+| nameConvert(INameConvert)                   | 名前変換実装                      |                                                              |
+| superClass(Class<?>)                        | 親クラスを設定                          | `BaseEntity.class`                                           |
+| superClass(String)                          | 親クラスを設定                          | `com.baomidou.global.BaseEntity`                             |
+| disableSerialVersionUID                     | シリアルバージョン UIDの生成を無効化         | デフォルト値: `true`                                               |
+| enableFileOverride                          | 既存ファイルのオーバーライド        | デフォルト値: `false`                                              |
+| enableColumnConstant                        | フィールド定数の生成を有効化         | デフォルト値: `false`                                              |
+| enableChainModel                            | チェーンモデルを有効化         | デフォルト値: `false`                                              |
+| enableLombok                                | Lombok モデルを有効化         | デフォルト値: `false`  デフォルトではGetter、Setterのみです。3.5.10以降ToStringが追加されました |
+| enableRemoveIsPrefix                        | Boolean 型フィールドの is プレフィックスの除去を有効化         | デフォルト値: `false`                                              |
+| enableTableFieldAnnotation                  | エンティティ生成時のフィールドアノテーションを有効化         | デフォルト値: `false`                                              |
+| enableActiveRecord                          | ActiveRecord モデルを有効化         | デフォルト値: `false`                                              |
+| versionColumnName(String)                   | 楽観ロックフィールド名(データベースフィールド)          | `versionColumnName` と `versionPropertyName` のいずれかを選択できます      |
+| versionPropertyName(String)                 | 楽観ロック属性名(エンティティ)                | `versionColumnName` と `versionPropertyName` のいずれかを選択できます      |
+| logicDeleteColumnName(String)               | 論理削除フィールド名(データベースフィールド)        | `logicDeleteColumnName` と `logicDeletePropertyName` のいずれかを選択できます |
+| logicDeletePropertyName(String)             | 論理削除属性名(エンティティ)              | `logicDeleteColumnName` と `logicDeletePropertyName` のいずれかを選択できます |
+| naming                                      | データベーステーブルからエンティティへのマッピング命名戦略      | デフォルトではアンダースコアからキャメルケースへの変換: `NamingStrategy.underline_to_camel` となっています    |
+| columnNaming                                | データベーステーブルフィールドからエンティティへのマッピング命名戦略  | デフォルトは `null`、指定されない場合は `naming` に基づいて実行します                      |
+| addSuperEntityColumns(String...)            | 親クラスの共通フィールドを追加         |                                                              |
+| addIgnoreColumns(String...)                 | 無視するフィールドを追加         |                                                              |
+| addTableFills(IFill...)                     | テーブルフィールド補完を追加         |                                                              |
+| addTableFills(List<IFill\>)                 | テーブルフィールド補完を追加         |                                                              |
+| idType(IdType)                              | グローバル主キータイプ         |                                                              |
+| convertFileName(ConverterFileName)          | ファイル名を変換         |                                                              |
+| formatFileName(String)                      | ファイル名をフォーマット         |                                                              |
+| toString(boolean)                           | ToString メソッドを生成するか         | デフォルトはtrue, 3.5.10以降から                                     |
+| fieldUseJavaDoc                             | フィールドの JavaDoc アノテーションを有効化         | デフォルトはtrue, 3.5.10以降から                                     |
+| classAnnotations(ClassAnnotationAttributes) | エンティティクラスアノテーションを追加         | 3.5.10以降から                                                 |
+| tableAnnotationHandler                      | テーブルアノテーションハンドラー         | 3.5.10以降から                                                 |
+| tableFieldAnnotationHandler                 | フィールドアノテーションハンドラー         | 3.5.10以降から                                                 |
+| enableLombok(ClassAnnotationAttributes...)  | Lombok モデルを有効化し Lombok アノテーションを設定         | 3.5.10以降から.   使用@Data例: enableLombok(new ClassAnnotationAttributes("@Data","lombok.Data")) |
 
-#### 示例配置
+#### 設定例
 
 ```java
 StrategyConfig strategyConfig = new StrategyConfig.Builder()
@@ -331,23 +330,23 @@ StrategyConfig strategyConfig = new StrategyConfig.Builder()
     .build();
 ```
 
-### Controller 策略配置
+### Controller 戦略設定
 
-Controller 策略配置用于定制 Controller 类的生成规则，包括父类、文件覆盖、驼峰转连字符、RestController 注解等。
+Controller 戦略設定は、Controller クラスの生成ルールをカスタマイズするために使用され、親クラス、ファイルオーバーライド、キャメルからアンダースコアへの変換、@RestController アノテーションなどが含まれます。
 
-#### 方法说明
+#### メソッド説明
 
-| 方法                               | 说明                           | 示例                               |
+| メソッド                               | 説明                           | 例                               |
 | ---------------------------------- | ------------------------------ | ---------------------------------- |
-| superClass(Class<?>)               | 设置父类                       | `BaseController.class`               |
-| superClass(String)                 | 设置父类                       | `com.baomidou.global.BaseController` |
-| enableFileOverride                 | 覆盖已生成文件                 | 默认值: `false`                       |
-| enableHyphenStyle                  | 开启驼峰转连字符               | 默认值: `false`                       |
-| enableRestStyle                    | 开启生成@RestController 控制器 | 默认值: `false`                       |
-| convertFileName(ConverterFileName) | 转换文件名称                   |                                    |
-| formatFileName(String)             | 格式化文件名称                 |                                    |
+| superClass(Class<?>)               | 親クラスを設定                       | `BaseController.class`               |
+| superClass(String)                 | 親クラスを設定                       | `com.baomidou.global.BaseController` |
+| enableFileOverride                 | 既存ファイルをオーバーライド         | デフォルト値: `false`                       |
+| enableHyphenStyle                  | キャメルからアンダースコアへの変換を有効化         | デフォルト値: `false`                       |
+| enableRestStyle                    | @RestController コントローラの生成を有効化         | デフォルト値: `false`                       |
+| convertFileName(ConverterFileName) | ファイル名を変換         |                                    |
+| formatFileName(String)             | ファイル名をフォーマット         |                                    |
 
-#### 示例配置
+#### 設定例
 
 ```java
 StrategyConfig strategyConfig = new StrategyConfig.Builder()
@@ -359,25 +358,25 @@ StrategyConfig strategyConfig = new StrategyConfig.Builder()
     .build();
 ```
 
-### Service 策略配置
+### Service 戦略設定
 
-Service 策略配置用于定制 Service 接口和实现类的生成规则，包括父类、文件覆盖、文件名称转换等。
+Service 戦略設定は、Service インターフェースと実装クラスの生成ルールをカスタマイズするために使用され、親クラス、ファイルオーバーライド、ファイル名変換などが含まれます。
 
-#### 方法说明
+#### メソッド説明
 
-| 方法                                          | 说明                          | 示例                                |
+| メソッド                                          | 説明                          | 例                                |
 | --------------------------------------------- | ----------------------------- | ----------------------------------- |
-| superServiceClass(Class<?>)                   |接口父类         | `BaseService.class`                   |
-| superServiceClass(String)                     | 设置 Service 接口父类         | `com.baomidou.global.BaseService`     |
-| superServiceImplClass(Class<?>)               | 设置 Service 实现类父类       | `BaseServiceImpl.class`               |
-| superServiceImplClass(String)                 | 设置 Service 实现类父类       | `com.baomidou.global.BaseServiceImpl` |
-| enableFileOverride                            | 覆盖已生成文件                | 默认值: `false`                        |
-| convertServiceFileName(ConverterFileName)     | 转换 Service 接口文件名称     |                                         |
-| convertServiceImplFileName(ConverterFileName) | 转换 Service 实现类文件名称   |                                         |
-| formatServiceFileName(String)                 | 格式化 Service 接口文件名称   |                                         |
-| formatServiceImplFileName(String)             | 格式化 Service 实现类文件名称 |                                         |
+| superServiceClass(Class<?>)                   | インターフェース親クラス         | `BaseService.class`                   |
+| superServiceClass(String)                     | Service インターフェース親クラスを設定         | `com.baomidou.global.BaseService`     |
+| superServiceImplClass(Class<?>)               | Service 実装クラス親クラスを設定         | `BaseServiceImpl.class`               |
+| superServiceImplClass(String)                 | Service 実装クラス親クラスを設定         | `com.baomidou.global.BaseServiceImpl` |
+| enableFileOverride                            | 既存ファイルをオーバーライド         | デフォルト値: `false`                        |
+| convertServiceFileName(ConverterFileName)     | Service インターフェースファイル名を変換         |                                         |
+| convertServiceImplFileName(ConverterFileName) | Service 実装クラスファイル名を変換         |                                         |
+| formatServiceFileName(String)                 | Service インターフェースファイル名をフォーマット         |                                         |
+| formatServiceImplFileName(String)             | Service 実装クラスファイル名をフォーマット         |                                         |
 
-#### 示例配置
+#### 設定例
 
 ```java
 StrategyConfig strategyConfig = new StrategyConfig.Builder()
@@ -389,28 +388,28 @@ StrategyConfig strategyConfig = new StrategyConfig.Builder()
     .build();
 ```
 
-### Mapper 策略配置
+### Mapper 戦略設定
 
-Mapper 策略配置用于定制 Mapper 接口和对应的 XML 映射文件的生成规则，包括父类、文件覆盖、Mapper 注解、结果映射、列列表、缓存实现类等。
+Mapper 戦略設定は、Mapper インターフェースと対応する XML マッピングファイルの生成ルールをカスタマイズするために使用され、親クラス、ファイルオーバーライド、Mapper 注釈、結果マッピング、列リスト、キャッシュ実装クラスなどが含まれます。
 
-#### 方法说明
+#### メソッド説明
 
-| 方法                                     | 说明                      | 示例                           |
+| メソッド                                     | 説明                      | 例                           |
 | ---------------------------------------- | ------------------------- | ------------------------------ |
-| superClass(Class<?>)                     | 设置父类                  | `BaseMapper.class`               |
-| superClass(String)                       | 设置父类                  | `com.baomidou.global.BaseMapper` |
-| enableFileOverride                       | 覆盖已生成文件            | 默认值: `false`                   |
-| enableMapperAnnotation                   | 开启 @Mapper 注解         | 默认值: `false`                   |
-| enableBaseResultMap                      | 启用 BaseResultMap 生成   | 默认值: `false`                   |
-| enableBaseColumnList                     | 启用 BaseColumnList       | 默认值: `false`                   |
-| cache(Class<? extends Cache>)            | 设置缓存实现类            | `MyMapperCache.class`            |
-| convertMapperFileName(ConverterFileName) | 转换 Mapper 类文件名称    |                                    |
-| convertXmlFileName(ConverterFileName)    | 转换 XML 文件名称         |                                    |
-| formatMapperFileName(String)             | 格式化 Mapper 文件名称    |                                    |
-| formatXmlFileName(String)                | 格式化 XML 实现类文件名称 |                                    |
-| generateMapperMethodHandler | 自定义生成Mapper方法实现 | 自3.5.10开始                     |
+| superClass(Class<?>)                     | 親クラスを設定                  | `BaseMapper.class`               |
+| superClass(String)                       | 親クラスを設定                  | `com.baomidou.global.BaseMapper` |
+| enableFileOverride                       | 既存ファイルをオーバーライド         | デフォルト値: `false`                   |
+| enableMapperAnnotation                   | @Mapper アノテーションを有効化         | デフォルト値: `false`                   |
+| enableBaseResultMap                      | BaseResultMap 生成を有効化         | デフォルト値: `false`                   |
+| enableBaseColumnList                     | BaseColumnListを有効化         | デフォルト値: `false`                   |
+| cache(Class<? extends Cache>)            | キャッシュ実装クラスを設定         | `MyMapperCache.class`            |
+| convertMapperFileName(ConverterFileName) | Mapper クラスファイル名を変換         |                                    |
+| convertXmlFileName(ConverterFileName)    | XML ファイル名を変換         |                                    |
+| formatMapperFileName(String)             | Mapper ファイル名をフォーマット         |                                    |
+| formatXmlFileName(String)                | XML 実装クラスファイル名をフォーマット         |                                    |
+| generateMapperMethodHandler | カスタムMapper生成メソッド実装         | 3.5.10 以降                     |
 
-#### 示例配置
+#### 設定例
 
 ```java
 StrategyConfig strategyConfig = new StrategyConfig.Builder()
@@ -425,46 +424,46 @@ StrategyConfig strategyConfig = new StrategyConfig.Builder()
     .build();
 ```
 
-## 自定义模板支持 (DTO/VO 等) 配置
+## カスタムテンプレートサポート (DTO/VO など) 設定
 
-MyBatis-Plus 代码生成器支持自定义模板，如 DTO (Data Transfer Object) 和 VO (Value Object) 等。
+MyBatis-Plus コードジェネレータは、DTO (Data Transfer Object) や VO (Value Object) などのカスタムテンプレートをサポートします。
 
 ```java
 FastAutoGenerator.create(url, username, password)
     .globalConfig(builder -> {
-        builder.author("abc") // 设置作者
-            .enableSwagger() // 开启 swagger 模式
-            .disableOpenDir() // 禁止打开输出目录
-            .outputDir(finalProjectPath + "/src/main/java"); // 指定输出目录
+        builder.author("abc") // 作者を設定
+            .enableSwagger() // swagger モードを有効化
+            .disableOpenDir() // 出力ディレクトリの自動オープンを無効化
+            .outputDir(finalProjectPath + "/src/main/java"); // 出力ディレクトリを指定
     })
     .packageConfig(builder -> {
-        builder.parent("com.baomidou.mybatisplus.samples") // 设置父包名
-            .moduleName("test") // 设置父包模块名
-            .entity("model.entity") // 设置实体类包名
-            .pathInfo(Collections.singletonMap(OutputFile.xml, finalProjectPath + "/src/main/resources/mapper")); // 设置 Mapper XML 文件生成路径
+        builder.parent("com.baomidou.mybatisplus.samples") // 親パッケージ名を設定
+            .moduleName("test") // 親パッケージモジュール名を設定
+            .entity("model.entity") // エンティティクラスパッケージ名を設定
+            .pathInfo(Collections.singletonMap(OutputFile.xml, finalProjectPath + "/src/main/resources/mapper")); // Mapper XML ファイル生成パスを設定
     })
      .injectionConfig(injectConfig -> {
                 Map<String,Object> customMap = new HashMap<>();
                 customMap.put("abc","1234");
-                injectConfig.customMap(customMap); //注入自定义属性
+                injectConfig.customMap(customMap); // カスタム属性を注入
                 injectConfig.customFile(new CustomFile.Builder()
-                    .fileName("entityDTO.java") //文件名称
-                    .templatePath("templates/entityDTO.java.ftl") //指定生成模板路径
-                    .packageName("dto") //包名,自3.5.10开始,可通过在package里面获取自定义包全路径,低版本下无法获取,示例:package.entityDTO
+                    .fileName("entityDTO.java") // ファイル名
+                    .templatePath("templates/entityDTO.java.ftl") // テンプレート生成パスを指定
+                    .packageName("dto") // パッケージ名。3.5.10以降、package内でカスタムパッケージのフルパスを取得可能になりました。それ以前のバージョンでは取得できません。例:package.entityDTO
                     .build());
       })
     .templateEngine(new FreemarkerTemplateEngine())
-    .execute(); // 执行生成
+    .execute(); // 生成を実行
 ```
 
-在上面的示例中，我们定义了一个名为 `entityDTO.java.ftl` 的自定义 Freemarker 模板，并将其路径添加到 `customFile` 映射中。在生成代码时，代码生成器将使用这个模板来生成 DTO 类。
+上記の例では、名前を `entityDTO.java.ftl` とするカスタム Freemarker テンプレートを定義し、`customFile` マップに追加しました。コード生成時、コードジェネレータはこのテンプレートを使用して DTO クラスを生成します。
 
 :::note
 
-- 自定义模板文件应放置在项目的 `templates` 目录下，或者指定一个有效的路径。
-- 模板文件的命名应遵循一定的规则，例如 `entityDTO.java.ftl`，其中 `entityDTO` 是生成的类名，`.java` 表示生成的文件类型，`.ftl` 是 Freemarker 模板的扩展名。
-- 在模板文件中，可以使用 Freemarker 的语法来访问 `objectMap` 中的数据，例如 `${entityName}` 可以获取实体类的名称。
+- カスタムテンプレートファイルはプロジェクトの `templates` ディレクトリに配置するか、有効なパスを指定する必要があります。
+- テンプレートファイルの命名は一定のルールに従う必要があります。例えば `entityDTO.java.ftl` を見てみると、`entityDTO` は生成クラス名、`.java` は生成ファイルタイプ、`.ftl` は Freemarker テンプレートの拡張子です。
+- テンプレートファイルでは、Freemarker の構文を使用して `objectMap` 内のデータにアクセスできます。例えば、`${entityName}` はエンティティクラス名を取得できます。
 
 :::
 
-通过上述配置，开发者可以根据项目需求自定义代码生成器的模板，从而生成符合特定项目结构的代码文件。
+上記の設定により、開発者はプロジェクトの要件に基づいてコードジェネレータのテンプレートをカスタマイズでき、特定のプロジェクト構造に合ったコードファイルを生成できます。

@@ -1,19 +1,19 @@
 ---
-title: 防全表更新与删除插件
+title: 全テーブル更新・削除防止プラグイン
 sidebar:
   order: 8
 ---
 
-`BlockAttackInnerInterceptor` 是 MyBatis-Plus 框架提供的一个安全插件，专门用于防止恶意的全表更新和删除操作。该插件通过拦截 `update` 和 `delete` 语句，确保这些操作不会无意中影响到整个数据表，从而保护数据的完整性和安全性。
+`BlockAttackInnerInterceptor` は、MyBatis-Plus フレームワークが提供するセキュリティプラグインであり、悪意のある全テーブル更新および削除操作を防止するために特化しています。このプラグインは `update` および `delete` ステートメントをインターセプトし、これらの操作が意図せずにデータテーブル全体に影響を与えないようにすることで、データの整合性とセキュリティを保護します。
 
-## 功能特性
+## 機能特性
 
-- **阻止全表更新删除**：插件能够识别并阻止没有指定条件的 `update` 和 `delete` 语句，这些语句可能会导致全表数据被修改或删除。
-- **保护数据安全**：通过限制全表操作，减少因误操作或恶意攻击导致的数据丢失风险。
+- **全テーブル更新・削除の阻止**: プラグインは、条件が指定されていない `update` および `delete` ステートメントを識別して阻止できます。これらのステートメントは、全テーブルのデータが変更または削除される可能性があります。
+- **データセキュリティの保護**: 全テーブル操作を制限することにより、誤操作や悪意のある攻撃によるデータ損失のリスクを低減します。
 
 ## 使用方法
 
-1. **注入插件**：在 Spring Boot 配置类中，通过 `@Bean` 注解将 `MybatisPlusInterceptor` 注入到 Spring 容器中，并添加 `BlockAttackInnerInterceptor` 作为内部拦截器。
+1. **プラグインの注入**: Spring Boot 設定クラスで、`@Bean` アノテーションを使用して `MybatisPlusInterceptor` を Spring コンテナに注入し、`BlockAttackInnerInterceptor` を内部インターセプターとして追加します。
 
 ```java
 @Configuration
@@ -28,13 +28,13 @@ public class MybatisPlusConfig {
 }
 ```
 
-2. **配置拦截规则**：插件默认拦截没有指定条件的 `update` 和 `delete` 语句。如果需要自定义拦截规则，可以参考 MyBatis-Plus 的文档进行配置。
+2. **インターセプトルールの設定**: プラグインはデフォルトで、条件が指定されていない `update` および `delete` ステートメントをインターセプトします。インターセプトルールをカスタマイズする必要がある場合は、MyBatis-Plus のドキュメントを参照して設定してください。
 
-## 测试示例
+## テスト例
 
-### 全表更新测试
+### 全テーブル更新テスト
 
-以下测试示例展示了如何使用 `BlockAttackInnerInterceptor` 来防止全表更新操作。
+以下のテスト例は、`BlockAttackInnerInterceptor` を使用して全テーブル更新操作を防止する方法を示しています。
 
 ```java
 @SpringBootTest
@@ -52,7 +52,7 @@ public class QueryWrapperTest {
         user.setId(999L);
         user.setName("custom_name");
         user.setEmail("xxx@mail.com");
-        // 由于没有指定更新条件，插件将抛出异常
+        // 更新条件が指定されていないため、プラグインは例外をスローします
         // com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Prohibition of table update operation
         Assertions.assertThrows(MybatisPlusException.class, () -> {
             userService.saveOrUpdate(user, null);
@@ -61,9 +61,9 @@ public class QueryWrapperTest {
 }
 ```
 
-### 部分更新测试
+### 部分更新テスト
 
-以下测试示例展示了如何正确地执行部分更新操作，插件不会对此类操作进行拦截。
+以下のテスト例は、部分更新操作を正しく実行する方法を示しています。プラグインはこの種の操作をインターセプトしません。
 
 ```java
 @SpringBootTest
@@ -83,7 +83,7 @@ public class QueryWrapperTest {
         user.setId(10L);
         user.setName("custom_name");
         user.setEmail("xxx@mail.com");
-        // 由于指定了更新条件，插件不会拦截此操作
+        // 更新条件が指定されているため、プラグインはこの操作をインターセプトしません
         userService.saveOrUpdate(user, wrapper);
     }
 }
@@ -91,9 +91,9 @@ public class QueryWrapperTest {
 
 :::note
 
-- **合理配置**：确保在配置插件时，考虑到项目的实际需求，避免过度限制导致正常操作受阻。
-- **测试验证**：在生产环境部署前，应充分测试插件的功能，确保其按预期工作。
+- **適切な設定**: プラグインを設定する際には、プロジェクトの実際の要件を考慮し、過度な制限によって通常の操作が妨げられないようにしてください。
+- **テスト検証**: 本番環境にデプロイする前に、プラグインの機能を十分にテストし、期待どおりに動作することを確認してください。
 
 :::
 
-`BlockAttackInnerInterceptor` 插件是 MyBatis-Plus 提供的一个重要的安全工具，它能够有效地防止全表更新和删除操作，保护数据库免受意外或恶意的数据破坏。通过合理配置和使用该插件，可以显著提高应用程序的数据安全性。
+`BlockAttackInnerInterceptor` プラグインは MyBatis-Plus が提供する重要なセキュリティツールであり、全テーブルの更新および削除操作を効果的に防止し、データベースを偶発的または悪意のあるデータ破壊から保護します。このプラグインを適切に設定して使用することで、アプリケーションのデータセキュリティを大幅に向上させることができます。

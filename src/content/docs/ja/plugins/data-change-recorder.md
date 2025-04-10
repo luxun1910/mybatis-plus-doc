@@ -1,26 +1,26 @@
 ---
-title: 数据变动记录插件
+title: データ変更記録プラグイン
 sidebar:
   order: 6
 ---
 
-在数据库操作中，记录数据变动和控制操作的安全性是非常重要的。MyBatis-Plus 提供了一个数据变动记录插件 `DataChangeRecorderInnerInterceptor`，它能够自动记录操作日志，还支持批量更新或删除的安全阈值控制。
+データベース操作において、データ変更の記録と操作のセキュリティ制御は非常に重要です。MyBatis-Plus は、データ変更記録プラグイン `DataChangeRecorderInnerInterceptor` を提供しています。これは、操作ログを自動的に記録し、さらに一括更新・削除のセキュリティ閾値制御をサポートします。
 
-## 插件简介
+## プラグイン概要
 
-`DataChangeRecorderInnerInterceptor` 是 MyBatis-Plus 提供的一个拦截器，它可以在执行数据库操作时自动记录数据变动，并且可以根据配置的安全阈值来控制操作，比如限制一次批量更新或删除的记录数不超过 1000 条。
+`DataChangeRecorderInnerInterceptor` は MyBatis-Plus が提供するインターセプターであり、データベース操作を実行する際に自動的にデータ変更を記録し、設定されたセキュリティ閾値に基づいて操作を制御できます。例えば、一度の一括更新または削除のレコード数を 1000 件以下に制限するなどです。
 
-为了更好地理解如何使用 `DataChangeRecorderInnerInterceptor`，你可以参考官方提供的测试用例：
+`DataChangeRecorderInnerInterceptor` の使用方法をより深く理解するために、公式が提供するテストケースを参照できます：
 
 - 👉 [testOptLocker4WrapperIsNull](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus/src/test/java/com/baomidou/mybatisplus/test/h2/H2UserTest.java)
 
-这个测试用例展示了如何使用插件进行数据变动记录和安全控制。
+このテストケースは、プラグインを使用してデータ変更記録とセキュリティ制御を行う方法を示しています。
 
-## 如何使用
+## 使用方法
 
-### 配置拦截器
+### インターセプターの設定
 
-在你的 Spring Boot 配置类中，添加 `DataChangeRecorderInnerInterceptor` 到拦截器链中，并根据需要配置安全阈值：
+Spring Boot の設定クラスで、`DataChangeRecorderInnerInterceptor` をインターセプターチェーンに追加し、必要に応じてセキュリティ閾値を設定します：
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -35,7 +35,7 @@ public class MybatisPlusConfig {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         DataChangeRecorderInnerInterceptor dataChangeRecorderInnerInterceptor = new DataChangeRecorderInnerInterceptor();
-        // 配置安全阈值，限制批量更新或删除的记录数不超过 1000 条
+        // セキュリティ閾値を設定し、一括更新または削除のレコード数を 1000 件以下に制限します
         dataChangeRecorderInnerInterceptor.setBatchUpdateLimit(1000).openBatchUpdateLimitation();
         interceptor.addInnerInterceptor(dataChangeRecorderInnerInterceptor);
         return interceptor;
@@ -43,18 +43,18 @@ public class MybatisPlusConfig {
 }
 ```
 
-在这个例子中，我们设置了批量更新或删除的安全阈值为 1000 条记录。
+この例では、一括更新または削除のセキュリティ閾値を 1000 レコードに設定しています。
 
-### 使用插件
+### プラグインの使用
 
-配置好插件之后，通过 MyBatis-Plus 执行操作，插件会自动记录数据变动并执行安全控制：
+プラグインを設定した後、MyBatis-Plus を介して操作を実行すると、プラグインは自動的にデータ変更を記録し、セキュリティ制御を実行します：
 
-当执行批量更新或删除操作时，如果操作的记录数超过了配置的安全阈值，插件会抛出异常。
+一括更新または削除操作を実行する際、操作するレコード数が設定されたセキュリティ閾値を超えた場合、プラグインは例外をスローします。
 
-## 注意事项
+## 注意事項
 
-- 确保在配置拦截器时设置了合适的安全阈值，以防止不安全的批量操作。
-- 插件会自动记录数据变动，但你需要自行实现日志记录的逻辑。
-- 在配置和使用插件时，要考虑到数据库的性能和操作的实际需求。
+- 安全でない一括操作を防ぐために、インターセプターを設定する際に適切なセキュリティ閾値を設定してください。
+- プラグインは自動的にデータ変更を記録しますが、ログ記録のロジックは自分で実装する必要があります。
+- プラグインを設定および使用する際には、データベースのパフォーマンスと操作の実際の要件を考慮してください。
 
-`DataChangeRecorderInnerInterceptor` 是一个强大的工具，它可以帮助你自动记录数据变动并控制操作的安全性。通过合理配置，你可以确保数据库操作的安全性和数据的完整性。记得在使用时遵循最佳实践，确保系统的安全性和稳定性。
+`DataChangeRecorderInnerInterceptor` は強力なツールであり、データ変更の自動記録と操作のセキュリティ制御に役立ちます。適切な設定により、データベース操作の安全性とデータの整合性を確保できます。使用する際には、システムの安全性と安定性を確保するために、ベストプラクティスに従うことを忘れないでください。

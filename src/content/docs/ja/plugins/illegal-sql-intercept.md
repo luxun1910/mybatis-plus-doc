@@ -1,26 +1,26 @@
 ---
-title: 非法SQL拦截插件
+title: 不正SQLインターセプタープラグイン
 sidebar:
   order: 7
 ---
 
-## 简介
+## 概要
 
-`IllegalSQLInnerInterceptor` 是 MyBatis-Plus 框架中的一个安全控制插件，用于拦截和检查非法SQL语句。该插件旨在帮助开发者在SQL执行前发现并解决潜在的安全问题，如全表更新、删除操作，以及对索引的检查等。
+`IllegalSQLInnerInterceptor` は、MyBatis-Plus フレームワークにおけるセキュリティ制御プラグインであり、不正なSQL文をインターセプトしてチェックするために使用されます。このプラグインは、開発者が SQL 実行前に潜在的なセキュリティ問題（例：全テーブル更新、削除操作、インデックスのチェックなど）を発見し、解決するのを支援することを目的としています。
 
-- 插件源码 👉 [IllegalSQLInnerInterceptor](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-jsqlparser-support/mybatis-plus-jsqlparser/src/main/java/com/baomidou/mybatisplus/extension/plugins/inner/IllegalSQLInnerInterceptor.java)
-- 测试用例 👉 [IllegalSQLInnerInterceptorTest](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-jsqlparser-support/mybatis-plus-jsqlparser/src/test/java/com/baomidou/mybatisplus/test/extension/plugins/inner/IllegalSQLInnerInterceptorTest.java)
+- プラグインソースコード 👉 [IllegalSQLInnerInterceptor](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-jsqlparser-support/mybatis-plus-jsqlparser/src/main/java/com/baomidou/mybatisplus/extension/plugins/inner/IllegalSQLInnerInterceptor.java)
+- テストケース 👉 [IllegalSQLInnerInterceptorTest](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-jsqlparser-support/mybatis-plus-jsqlparser/src/test/java/com/baomidou/mybatisplus/test/extension/plugins/inner/IllegalSQLInnerInterceptorTest.java)
 
-## 功能特性
+## 機能特性
 
-- **拦截SQL类型场景**：插件能够识别并拦截特定类型的SQL语句，如全表更新、删除等高风险操作。
-- **强制使用索引**：确保在执行查询时使用索引，以提高性能并避免全表扫描。
-- **全表更新操作检查**：防止未经授权的全表更新或删除操作，减少数据丢失风险。
-- **`not`、`or`、子查询检查**：对包含`not`、`or`关键字或子查询的SQL语句进行额外检查，以防止逻辑错误或性能问题。
+- **インターセプトする SQL タイプのシナリオ**：プラグインは、特定のタイプの SQL 文（例：全テーブル更新、削除などの高リスク操作）を識別し、インターセプトできます。
+- **インデックスの強制使用**：クエリ実行時にインデックスが使用されることを保証し、パフォーマンスを向上させ、全テーブルスキャンを回避します。
+- **全テーブル更新操作のチェック**：未承認の全テーブル更新または削除操作を防止し、データ損失のリスクを低減します。
+- **`not`、`or`、サブクエリのチェック**：`not`、`or`キーワードまたはサブクエリを含む SQL 文に対して追加のチェックを行い、論理エラーやパフォーマンス問題を防止します。
 
 ## 使用方法
 
-**Java 配置示例**
+**Java 設定例**
 
 ```java
 @Configuration
@@ -29,14 +29,14 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        // 添加非法SQL拦截器
+        // 不正 SQL インターセプターを追加
         interceptor.addInnerInterceptor(new IllegalSQLInnerInterceptor());
         return interceptor;
     }
 }
 ```
 
-**XML 配置示例**
+**XML 設定例**
 
 ```xml
 <bean id="mybatisPlusInterceptor" class="com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor">
@@ -50,9 +50,9 @@ public class MybatisPlusConfig {
 
 :::note
 
-- **查阅官方文档**：在使用插件前，请仔细阅读 MyBatis-Plus 的官方文档，了解插件的详细使用说明和配置方法。
-- **自定义适配**：该插件提供了一种非法SQL拦截的解决方案，但可能不适用于所有企业环境。开发者应根据自身项目需求，对插件进行适当的修改和优化。
+- **公式ドキュメントの参照**：プラグインを使用する前に、MyBatis-Plus の公式ドキュメントを注意深く読み、プラグインの詳細な使用説明と設定方法を理解してください。
+- **カスタム適応**：このプラグインは不正 SQL インターセプトのソリューションを提供しますが、すべての企業環境に適しているとは限りません。開発者は自身のプロジェクトのニーズに応じて、プラグインを適切に修正および最適化する必要があります。
 
 :::
 
-`IllegalSQLInnerInterceptor` 插件是 MyBatis-Plus 提供的一个强大的安全工具，它能够帮助开发者提前发现并解决潜在的SQL安全问题。通过合理配置和使用该插件，可以大大提高数据库操作的安全性和效率。
+`IllegalSQLInnerInterceptor` プラグインは、MyBatis-Plus が提供する強力なセキュリティツールであり、開発者が潜在的な SQL セキュリティ問題を事前に発見し、解決するのに役立ちます。このプラグインを適切に設定して使用することで、データベース操作のセキュリティと効率を大幅に向上させることができます。

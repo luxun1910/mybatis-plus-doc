@@ -1,20 +1,20 @@
 ---
-title: 动态表名插件
+title: 動的テーブル名プラグイン
 sidebar:
   order: 5
 ---
 
-在数据库应用程序开发中，我们有时需要根据不同的条件查询不同的表。MyBatis-Plus 提供了一个动态表名插件 `DynamicTableNameInnerInterceptor`，它允许我们在运行时动态地改变 SQL 语句中的表名，这对于处理分表逻辑非常有用。
+データベースアプリケーション開発では、異なる条件に基づいて異なるテーブルを照会する必要がある場合があります。MyBatis-Plus は動的テーブル名プラグイン `DynamicTableNameInnerInterceptor` を提供しており、これにより実行時に SQL ステートメント内のテーブル名を動的に変更できます。これは、テーブル分割ロジックを処理するのに非常に役立ちます。
 
-## 插件简介
+## プラグイン紹介
 
-`DynamicTableNameInnerInterceptor` 是 MyBatis-Plus 提供的一个拦截器，它可以在执行 SQL 语句之前，根据配置的规则动态地替换表名。这个功能在处理分表逻辑时非常有用，比如根据日期将数据存储在不同的表中。
+`DynamicTableNameInnerInterceptor` は MyBatis-Plus が提供するインターセプターであり、SQL ステートメントを実行する前に、設定されたルールに基づいてテーブル名を動的に置き換えることができます。この機能は、日付に基づいてデータを異なるテーブルに格納するなど、テーブル分割ロジックを処理する際に非常に役立ちます。
 
-## 快速开始
+## クイックスタート
 
-### 配置拦截器
+### インターセプターの設定
 
-在你的 Spring Boot 配置类中，添加 `DynamicTableNameInnerInterceptor` 到拦截器链中，并配置表名处理器：
+Spring Boot の設定クラスで、`DynamicTableNameInnerInterceptor` をインターセプターチェーンに追加し、テーブル名ハンドラーを設定します。
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -30,7 +30,7 @@ public class MybatisPlusConfig {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         DynamicTableNameInnerInterceptor dynamicTableNameInnerInterceptor = new DynamicTableNameInnerInterceptor();
         dynamicTableNameInnerInterceptor.setTableNameHandler((sql, tableName) -> {
-            // 获取参数方法
+            // パラメータ取得メソッド
             Map<String, Object> paramMap = RequestDataHelper.getRequestData();
             paramMap.forEach((k, v) -> System.err.println(k + "----" + v));
 
@@ -47,11 +47,11 @@ public class MybatisPlusConfig {
 }
 ```
 
-在这个例子中，我们定义了一个表名处理器，它会根据随机数决定将表名后缀设置为 `_2018` 或 `_2019`。
+この例では、乱数に基づいてテーブル名のサフィックスを `_2018` または `_2019` に設定するテーブル名ハンドラーを定義しています。
 
-### 使用动态表名
+### 動的テーブル名の使用
 
-在你的 Mapper 接口中，不需要特别指定动态表名，因为表名将在运行时由拦截器动态处理。
+Mapper インターフェースでは、動的テーブル名を特別に指定する必要はありません。テーブル名は実行時にインターセプターによって動的に処理されるためです。
 
 ```java
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -61,20 +61,20 @@ public interface UserMapper extends BaseMapper<User> {
 }
 ```
 
-当执行查询时，MyBatis-Plus 会自动将表名替换为实际的表名。
+クエリを実行すると、MyBatis-Plus は自動的にテーブル名を実際のテーブル名に置き換えます。
 
-## 注意事项
+## 注意事項
 
-- 为了防止误替换，建议将动态表名定义得复杂一些，例如使用前缀 `mp_dt_`。
-- 确保你的表名规则不会导致 SQL 注入等安全问题。
-- 在配置动态表名时，要考虑到数据库的兼容性，确保替换后的表名符合数据库的命名规则。
+- 誤った置換を防ぐために、動的テーブル名をより複雑に定義することをお勧めします。たとえば、プレフィックス `mp_dt_` を使用します。
+- テーブル名のルールが SQL インジェクションなどのセキュリティ問題を引き起こさないことを確認してください。
+- 動的テーブル名を設定する際には、データベースの互換性を考慮し、置換後のテーブル名がデータベースの命名規則に準拠していることを確認してください。
 
-## 示例项目
+## サンプルプロジェクト
 
-为了更好地理解如何使用 `DynamicTableNameInnerInterceptor`，你可以参考官方提供的示例项目：
+`DynamicTableNameInnerInterceptor` の使用方法をよりよく理解するために、公式が提供するサンプルプロジェクトを参照できます。
 
 - 👉 [mybatis-plus-sample-dynamic-tablename](https://gitee.com/baomidou/mybatis-plus-samples/tree/master/mybatis-plus-sample-dynamic-tablename)
 
-这个示例项目展示了如何根据年份动态地查询不同的用户表。
+このサンプルプロジェクトは、年号に基づいて異なるユーザーテーブルを動的に照会する方法を示しています。
 
-`DynamicTableNameInnerInterceptor` 是一个强大的工具，它可以帮助你轻松地处理动态表名的场景。通过合理配置，你可以让 MyBatis-Plus 自动为你处理复杂的分表逻辑，从而提高开发效率。记得在使用时遵循最佳实践，确保系统的安全性和稳定性。
+`DynamicTableNameInnerInterceptor` は強力なツールであり、動的テーブル名のシナリオを簡単に処理するのに役立ちます。適切に設定することで、MyBatis-Plus に複雑なテーブル分割ロジックを自動的に処理させることができ、開発効率を向上させることができます。使用する際には、ベストプラクティスに従い、システムのセキュリティと安定性を確保することを忘れないでください。

@@ -1,22 +1,23 @@
 ---
-title: 数据权限插件
+title: データ権限プラグイン
 sidebar:
   order: 4
 ---
 
-DataPermissionInterceptor 是 MyBatis-Plus 提供的一个插件，用于实现数据权限控制。它通过拦截执行的 SQL 语句，并动态拼接权限相关的 SQL 片段，来实现对用户数据访问的控制。
+DataPermissionInterceptor は、MyBatis-Plus が提供するデータ権限制御を実現するためのプラグインです。実行される SQL ステートメントをインターセプトし、権限関連の SQL フラグメントを動的に結合することで、ユーザーのデータアクセスを制御します。
 
-## 插件原理
+## プラグインの原理
 
-DataPermissionInterceptor 的工作原理与租户插件类似，它会在 SQL 执行前拦截 SQL 语句，并根据用户权限动态添加权限相关的 SQL 片段。这样，只有用户有权限访问的数据才会被查询出来。
+DataPermissionInterceptor の動作原理はテナントプラグインと似ており、SQL 実行前に SQL ステートメントをインターセプトし、ユーザー権限に基づいて権限関連の SQL フラグメントを動的に追加します。これにより、ユーザーがアクセス権を持つデータのみが照会されます。
 
-## 插件地址和测试用例
+## プラグインの場所とテストケース
 
-- **插件地址**：[DataPermissionInterceptor](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-extension/src/main/java/com/baomidou/mybatisplus/extension/plugins/inner/DataPermissionInterceptor.java)
-- **测试用例**：[DataPermissionInterceptorTest](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-extension/src/test/java/com/baomidou/mybatisplus/test/extension/plugins/inner/DataPermissionInterceptorTest.java)
+- **プラグインの場所**：[DataPermissionInterceptor](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-extension/src/main/java/com/baomidou/mybatisplus/extension/plugins/inner/DataPermissionInterceptor.java)
+- **テストケース**：[DataPermissionInterceptorTest](https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-extension/src/test/java/com/baomidou/mybatisplus/test/extension/plugins/inner/DataPermissionInterceptorTest.java)
 
-## 核心代码
-以下是 SQL 片段组装的核心逻辑代码：
+## コアコード
+
+以下は、SQL フラグメントを組み立てるコアロジックコードです。
 
 ```java
 new DataPermissionInterceptor(new MultiDataPermissionHandler() {
@@ -42,17 +43,18 @@ new DataPermissionInterceptor(new MultiDataPermissionHandler() {
 
 :::note
 
-仔细阅读插件的主要部分使用说明，确保正确注入数据权限插件，并自行定制 `SQL` 拼装逻辑。
+プラグインの主要部分の使用説明をよく読み、データ権限プラグインが正しく注入されていることを確認し、`SQL` の組み立てロジックを独自にカスタマイズしてください。
 
 :::
 
 ## JSQLParser
-**JSQLParser** 是一个开源的 SQL 解析库，可方便地解析和修改 SQL 语句。它是插件实现权限逻辑的关键工具，MyBatis-Plus 的数据权限依托于 JSQLParser 的解析能力。
 
-以下示例展示如何使用 JSQLParser 来修改 `SQL`：
+**JSQLParser** は、SQL ステートメントを簡単に解析および変更できるオープンソースの SQL 解析ライブラリです。これは、プラグインが権限ロジックを実装するための重要なツールであり、MyBatis-Plus のデータ権限は JSQLParser の解析能力に依存しています。
+
+以下の例は、JSQLParser を使用して `SQL` を変更する方法を示しています。
 
 ```java
-// 示例 SQL
+// SQL 例
 String sql = "SELECT * FROM user WHERE status = 'active'";
 Expression expression;
 
@@ -61,7 +63,7 @@ try {
     PlainSelect select = (PlainSelect) ((Select) CCJSqlParserUtil.parse(sql)).getSelectBody();
     select.setWhere(expression);
 
-    System.out.println(select); // 输出：SELECT * FROM user WHERE status = 'inactive'
+    System.out.println(select); // 出力：SELECT * FROM user WHERE status = 'inactive'
 } catch (JSQLParserException e) {
     e.printStackTrace();
 }
@@ -69,16 +71,17 @@ try {
 
 ## 使用方法
 
-### 第一步：实现数据权限逻辑
-自定义 `MultiDataPermissionHandler`，实现特定业务逻辑。
+### ステップ1：データ権限ロジックの実装
+
+カスタム `MultiDataPermissionHandler` を作成し、特定のビジネスロジックを実装します。
 
 ```java
 public class CustomDataPermissionHandler extends MultiDataPermissionHandler {
     @Override
     public Expression getSqlSegment(Table table, Expression where, String mappedStatementId) {
-        // 在此处编写自定义数据权限逻辑
+        // ここにカスタムデータ権限ロジックを記述します
         try {
-            String sqlSegment = "..."; // 数据权限相关的 SQL 片段
+            String sqlSegment = "..."; // データ権限関連の SQL フラグメント
             return CCJSqlParserUtil.parseCondExpression(sqlSegment);
         } catch (JSQLParserException e) {
             e.printStackTrace();
@@ -88,13 +91,14 @@ public class CustomDataPermissionHandler extends MultiDataPermissionHandler {
 }
 ```
 
-### 第二步：注册数据权限拦截器
-将自定义的处理器注册到 `DataPermissionInterceptor` 中。
+### ステップ2：データ権限インターセプターの登録
+
+カスタムハンドラーを `DataPermissionInterceptor` に登録します。
 
 ```java
-// 在 MyBatis 配置中
+// MyBatis 設定内
 Interceptor dataPermissionInterceptor = new DataPermissionInterceptor(new CustomDataPermissionHandler());
 mybatisConfiguration.addInterceptor(dataPermissionInterceptor);
 ```
 
-通过使用 DataPermissionInterceptor，你可以轻松地在 MyBatis-Plus 应用中实现数据权限控制，确保用户只能访问其权限范围内的数据，从而提高数据的安全性。
+DataPermissionInterceptor を使用することで、MyBatis-Plus アプリケーションでデータ権限制御を簡単に実装でき、ユーザーが権限範囲内のデータにのみアクセスできるようにし、データのセキュリティを向上させることができます。

@@ -105,25 +105,25 @@ repositories {
     </dependencies>
 </dependencyManagement>
 
-<!-- spring boot3 引入可选模块 -->
+<!-- spring boot3 オプションモジュール導入 -->
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
 </dependency>
 
-<!-- jdk 11+ 引入可选模块 -->
+<!-- jdk 11+ オプションモジュール導入 -->
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-jsqlparser</artifactId>
 </dependency>
 
-<!-- spring boot2 引入可选模块 -->
+<!-- spring boot2 オプションモジュール導入 -->
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-boot-starter</artifactId>
 </dependency>
 
-<!-- jdk 8+ 引入可选模块 -->
+<!-- jdk 8+ オプションモジュール導入 -->
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
@@ -134,22 +134,22 @@ repositories {
 - Gradle
 
 ```groovy
-// 依赖管理
+// 依存性管理
 dependencyManagement {
     imports {
         mavenBom "com.baomidou:mybatis-plus-bom:3.5.9+ 版本"
     }
 }
 
-// spring boot3 引入可选模块
+// spring boot3 オプションモジュール導入
 implementation("com.baomidou:mybatis-plus-spring-boot3-starter")
 
-// jdk 11+ 引入可选模块
+// jdk 11+ オプションモジュール導入
 implementation("com.baomidou:mybatis-plus-jsqlparser")
 
-// spring boot2 引入可选模块
+// spring boot2 オプションモジュール導入
 implementation("com.baomidou:mybatis-plus-boot-starter")
 
-// jdk 8+ 引入可选模块
+// jdk 8+ オプションモジュール導入
 implementation("com.baomidou:mybatis-plus-jsqlparser-4.9")
 ```

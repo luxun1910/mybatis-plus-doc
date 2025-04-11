@@ -1,36 +1,36 @@
 ---
-title: 代码生成器配置
+title: コードジェネレータの設定
 sidebar:
   order: 4
 ---
 
 import Badge from "@/components/Badge.astro";
 
-MyBatis-Plus 代码生成器是一个强大的工具，它能够根据数据库表结构自动生成对应的实体类、Mapper接口、XML映射文件以及Service层代码。这个工具极大地简化了基于MyBatis框架的开发流程，提高了开发效率，尤其是在需要处理大量数据库表时。
+MyBatis-Plus コードジェネレータは、データベースのテーブル構造に基づいて、対応するエンティティクラス、Mapper インターフェース、XML マッピングファイル、および Service レイヤーのコードを自動生成できる強力なツールです。このツールは、MyBatis フレームワークに基づく開発プロセスを大幅に簡素化し、開発効率を向上させます。特に多数のデータベーステーブルを扱う必要がある場合に役立ちます。
 
-### 主要特点
+### 主な特徴
 
-- **自动化**：代码生成器能够自动根据数据库表结构生成相应的Java代码，减少了手动编写重复代码的工作量。
-- **可配置性**：通过配置文件或代码，可以灵活地指定生成代码的包路径、表名、字段名、模板等，满足不同项目的需求。
-- **模板支持**：支持自定义代码模板，可以根据项目需求定制代码风格和结构。
-- **多数据库支持**：支持多种数据库类型，如MySQL、Oracle、SQL Server等，只需配置相应的数据库连接信息即可。
-- **集成简单**：可以轻松集成到现有的项目中，只需几行代码即可启动代码生成过程。
+- **自動化**：コードジェネレータは、データベースのテーブル構造に基づいて対応する Java コードを自動的に生成し、繰り返しコードを手動で書く作業を減らします。
+- **設定可能性**：設定ファイルやコードを通じて、生成されるコードのパッケージパス、テーブル名、フィールド名、テンプレートなどを柔軟に指定でき、さまざまなプロジェクトのニーズを満たします。
+- **テンプレートサポート**：カスタムコードテンプレートをサポートし、プロジェクトの要件に応じてコードスタイルと構造をカスタマイズできます。
+- **複数データベースサポート**：MySQL、Oracle、SQL Serverなど、さまざまなデータベースタイプをサポートしています。対応するデータベース接続情報を設定するだけで使用できます。
+- **簡単な統合**：既存のプロジェクトに簡単に統合でき、数行のコードでコード生成プロセスを開始できます。
 
-### 使用场景
+### 使用シーン
 
-- **新项目搭建**：在新项目开始时，可以使用代码生成器快速生成基础的CRUD代码，加快项目启动速度。
-- **表结构变更**：当数据库表结构发生变化时，可以通过代码生成器更新对应的Java代码，保持代码与数据库的一致性。
-- **重复性工作**：在需要编写大量相似CRUD操作的场景中，代码生成器可以显著减少重复劳动，提高开发效率。
+- **新規プロジェクトの構築**：新しいプロジェクトの開始時に、コードジェネレータを使用して基本的な CRUD コードを迅速に生成し、プロジェクトの立ち上げ速度を上げることができます。
+- **テーブル構造の変更**：データベーステーブルの構造が変更された場合、コードジェネレータを使用して対応する Java コードを更新し、コードとデータベースの一貫性を維持できます。
+- **繰り返し作業**：多数の類似した CRUD 操作を記述する必要があるシナリオでは、コードジェネレータが繰り返し作業を大幅に削減し、開発効率を向上させることができます。
 
-### 如何使用
+### 使用方法
 
-1. **配置数据源**：指定数据库类型、连接URL、用户名和密码等。
-2. **配置策略**：选择需要生成代码的表，设置表名和字段名的命名策略等。
-3. **配置包信息**：设置生成代码的包路径，包括实体类、Mapper接口、Service等。
-4. **配置模板**：如果需要自定义代码风格，可以配置或创建自定义的代码模板。
-5. **执行生成**：运行代码生成器，根据配置生成相应的Java代码。
+1. **データソースの設定**：データベースタイプ、接続URL、ユーザー名、パスワードなどを指定します。
+2. **戦略の設定**：コードを生成するテーブルを選択し、テーブル名とフィールド名の命名戦略などを設定します。
+3. **パッケージ情報の設定**：エンティティクラス、Mapper インターフェース、Service など、生成されるコードのパッケージパスを設定します。
+4. **テンプレートの設定**：コードスタイルをカスタマイズする必要がある場合は、カスタムコードテンプレートを設定または作成できます。
+5. **生成の実行**：コードジェネレータを実行し、設定に基づいて対応する Java コードを生成します。
 
-### 示例代码
+### サンプルコード
 
 ```java
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -41,50 +41,50 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public class CodeGenerator {
 
     public static void main(String[] args) {
-        // 全局配置
+        // グローバル設定
         GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setOutputDir(System.getProperty("user.dir") + "/src/main/java") // 设置输出目录
-                .setAuthor("Your Name") // 设置作者
-                .setOpen(false) // 设置生成后是否自动打开目录
-                .setFileOverride(true) // 设置文件存在时是否覆盖
-                .setServiceName("%sService") // 设置Service接口名后缀
-                .setIdType(IdType.AUTO) // 设置主键生成策略
-                .setSwagger2(true); // 设置是否生成Swagger注解
+        globalConfig.setOutputDir(System.getProperty("user.dir") + "/src/main/java") // 出力ディレクトリの設定
+                .setAuthor("Your Name") // 作者の設定
+                .setOpen(false) // 生成後にディレクトリを自動的に開くかどうかを設定
+                .setFileOverride(true) // ファイルが存在する場合に上書きするかどうかを設定
+                .setServiceName("%sService") // Service インターフェース名の接尾辞を設定
+                .setIdType(IdType.AUTO) // 主キー生成戦略の設定
+                .setSwagger2(true); // Swagger アノテーションを生成するかどうかを設定
 
-        // 数据源配置
+        // データソース設定
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setDbType(DbType.MYSQL) // 设置数据库类型
-                .setUrl("jdbc:mysql://localhost:3306/mybatis_plus?useSSL=false&serverTimezone=UTC") // 数据库连接URL
-                .setUsername("root") // 数据库用户名
-                .setPassword("password") // 数据库密码
-                .setDriverName("com.mysql.cj.jdbc.Driver"); // 数据库驱动类名
+        dataSourceConfig.setDbType(DbType.MYSQL) // データベースタイプの設定
+                .setUrl("jdbc:mysql://localhost:3306/mybatis_plus?useSSL=false&serverTimezone=UTC") // データベース接続 URL
+                .setUsername("root") // データベースユーザー名
+                .setPassword("password") // データベースパスワード
+                .setDriverName("com.mysql.cj.jdbc.Driver"); // データベースドライバークラス名
 
-        // 策略配置
+        // 戦略設定
         StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setInclude("user", "order") // 指定需要生成代码的表名
-                .setNaming(NamingStrategy.underline_to_camel) // 设置表名转类名策略
-                .setColumnNaming(NamingStrategy.underline_to_camel) // 设置列名转属性名策略
-                .setEntityLombokModel(true) // 设置实体类使用Lombok模型
-                .setRestControllerStyle(true) // 设置Controller使用REST风格
-                .setTablePrefix(new String[]{"tbl_"}); // 设置表名前缀
+        strategyConfig.setInclude("user", "order") // コード生成が必要なテーブル名を指定
+                .setNaming(NamingStrategy.underline_to_camel) // テーブル名からクラス名への変換戦略を設定
+                .setColumnNaming(NamingStrategy.underline_to_camel) // 列名から属性名への変換戦略を設定
+                .setEntityLombokModel(true) // エンティティクラスで Lombok モデルを使用するように設定
+                .setRestControllerStyle(true) // Controller で REST スタイルを使用するように設定
+                .setTablePrefix(new String[]{"tbl_"}); // テーブル名のプレフィックスを設定
 
-        // 包配置
+        // パッケージ設定
         PackageConfig packageConfig = new PackageConfig();
-        packageConfig.setParent("com.example") // 设置父包名
-                .setMapper("mapper") // 设置Mapper接口所在的子包名
-                .setEntity("entity") // 设置实体类所在的子包名
-                .setController("controller") // 设置Controller所在的子包名
-                .setService("service") // 设置Service所在的子包名
-                .setXml("mapper"); // 设置Mapper XML文件所在的子包名
+        packageConfig.setParent("com.example") // 親パッケージ名を設定
+                .setMapper("mapper") // Mapper インターフェースが存在するサブパッケージ名を設定
+                .setEntity("entity") // エンティティクラスが存在するサブパッケージ名を設定
+                .setController("controller") // Controller が存在するサブパッケージ名を設定
+                .setService("service") // Service が存在するサブパッケージ名を設定
+                .setXml("mapper"); // Mapper XML ファイルが存在するサブパッケージ名を設定
 
-        // 模板配置
+        // テンプレート設定
         TemplateConfig templateConfig = new TemplateConfig();
-        templateConfig.setXml(null) // 不生成XML文件
-                .setController("templates/controller.java.vm") // 设置Controller模板路径
-                .setEntity("templates/entity.java.vm") // 设置实体类模板路径
-                .setMapper("templates/mapper.java.vm"); // 设置Mapper接口模板路径
+        templateConfig.setXml(null) // XMLファイルを生成しない
+                .setController("templates/controller.java.vm") // Controller テンプレートパスを設定
+                .setEntity("templates/entity.java.vm") // エンティティクラステンプレートパスを設定
+                .setMapper("templates/mapper.java.vm"); // Mapper インターフェーステンプレートパスを設定
 
-        // 整合配置
+        // 統合設定
         AutoGenerator autoGenerator = new AutoGenerator();
         autoGenerator.setGlobalConfig(globalConfig)
                 .setDataSource(dataSourceConfig)
@@ -92,611 +92,610 @@ public class CodeGenerator {
                 .setPackageInfo(packageConfig)
                 .setTemplate(templateConfig);
 
-        // 执行生成
+        // 生成の実行
         autoGenerator.execute();
     }
 }
 ```
 
-通过MyBatis-Plus代码生成器，开发者可以更加专注于业务逻辑的实现，而不是繁琐的CRUD代码编写，从而提升开发效率和代码质量。
+MyBatis-Plus コードジェネレータを使用することで、開発者は面倒な CRUD コードの記述ではなく、ビジネスロジックの実装に集中でき、開発効率とコード品質を向上させることができます。
 
-## 基本配置
+## 基本設定
 
-### 数据源配置（dataSource）
+### データソース設定（dataSource）
 
-- 类型：`DataSourceConfig`
-- 默认值：`null`
+- タイプ：`DataSourceConfig`
+- デフォルト値：`null`
 
-数据源配置用于指定需要生成代码的具体数据库。通过配置数据源，代码生成器能够连接到数据库并获取表结构信息，以便生成相应的代码。
+データソース設定は、コードを生成するための特定のデータベースを指定するために使用されます。データソースを設定することで、コードジェネレータはデータベースに接続してテーブル構造情報を取得し、対応するコードを生成することができます。
 
-**示例配置：**
+**設定例：**
 
 ```java
 DataSourceConfig dataSourceConfig = new DataSourceConfig();
-dataSourceConfig.setDbType(DbType.MYSQL) // 设置数据库类型，如MySQL、Oracle等
-    .setUrl("jdbc:mysql://localhost:3306/mybatis_plus") // 数据库连接URL
-    .setUsername("root") // 数据库用户名
-    .setPassword("password") // 数据库密码
-    .setDriverName("com.mysql.cj.jdbc.Driver"); // 数据库驱动类名
+dataSourceConfig.setDbType(DbType.MYSQL) // MySQL、Oracle などのデータベースタイプを設定
+    .setUrl("jdbc:mysql://localhost:3306/mybatis_plus") // データベース接続 URL
+    .setUsername("root") // データベースユーザー名
+    .setPassword("password") // データベースパスワード
+    .setDriverName("com.mysql.cj.jdbc.Driver"); // データベースドライバークラス名
 ```
 
-### 数据库表配置（strategy）
+### データベーステーブル設定（strategy）
 
-- 类型：`StrategyConfig`
-- 默认值：`null`
+- タイプ：`StrategyConfig`
+- デフォルト値：`null`
 
-数据库表配置用于指定需要生成哪些表的代码或者排除哪些表。通过策略配置，可以灵活地控制代码生成的范围。
+データベーステーブル設定は、どのテーブルのコードを生成するか、またはどのテーブルを除外するかを指定するために使用されます。戦略設定を通じて、コード生成の範囲を柔軟に制御できます。
 
-**示例配置：**
+**設定例：**
 
 ```java
 StrategyConfig strategyConfig = new StrategyConfig();
-strategyConfig.setInclude("user", "order") // 指定需要生成代码的表名
-    .setExclude("user_detail") // 排除不需要生成代码的表名
-    .setEntityLombokModel(true) // 设置实体类使用Lombok模型
-    .setRestControllerStyle(true); // 设置Controller使用REST风格
+strategyConfig.setInclude("user", "order") // コード生成が必要なテーブル名を指定
+    .setExclude("user_detail") // コード生成が不要なテーブル名を除外
+    .setEntityLombokModel(true) // エンティティクラスで Lombok モデルを使用するように設定
+    .setRestControllerStyle(true); // Controller で REST スタイルを使用するように設定
 ```
 
-### 包名配置（packageInfo）
+### パッケージ名設定（packageInfo）
 
-- 类型：`PackageConfig`
-- 默认值：`null`
+- タイプ：`PackageConfig`
+- デフォルト値：`null`
 
-包名配置用于指定生成代码的包路径。通过配置包名，可以确保生成的代码放置在正确的目录结构中。
+パッケージ名設定は、生成されるコードのパッケージパスを指定するために使用されます。パッケージ名を設定することで、生成されたコードが正しいディレクトリ構造に配置されるようになります。
 
-**示例配置：**
+**設定例：**
 
 ```java
 PackageConfig packageConfig = new PackageConfig();
-packageConfig.setParent("com.example") // 设置父包名
-    .setMapper("mapper") // 设置Mapper接口所在的子包名
-    .setEntity("entity") // 设置实体类所在的子包名
-    .setController("controller"); // 设置Controller所在的子包名
+packageConfig.setParent("com.example") // 親パッケージ名を設定
+    .setMapper("mapper") // Mapper インターフェースが存在するサブパッケージ名を設定
+    .setEntity("entity") // エンティティクラスが存在するサブパッケージ名を設定
+    .setController("controller"); // Controller が存在するサブパッケージ名を設定
 ```
 
-### 模板配置（template）
+### テンプレート設定（template）
 
-- 类型：`TemplateConfig`
-- 默认值：`null`
+- タイプ：`TemplateConfig`
+- デフォルト値：`null`
 
-模板配置允许自定义代码生成的模板，实现个性化操作。通过模板配置，可以定制生成代码的格式和内容。
+テンプレート設定では、コード生成のテンプレートをカスタマイズし、個別の操作を実現できます。テンプレート設定を通じて、生成されるコードの形式や内容をカスタマイズできます。
 
-**示例配置：**
+**設定例：**
 
 ```java
 TemplateConfig templateConfig = new TemplateConfig();
-templateConfig.setXml(null) // 不生成XML文件
-    .setController("templates/controller.java.vm") // 设置Controller模板路径
-    .setEntity("templates/entity.java.vm") // 设置实体类模板路径
-    .setMapper("templates/mapper.java.vm"); // 设置Mapper接口模板路径
+templateConfig.setXml(null) // XML ファイルを生成しない
+    .setController("templates/controller.java.vm") // Controller テンプレートパスを設定
+    .setEntity("templates/entity.java.vm") // エンティティクラステンプレートパスを設定
+    .setMapper("templates/mapper.java.vm"); // Mapper インターフェーステンプレートパスを設定
 ```
 
-### 全局策略配置（globalConfig）
+### グローバル戦略設定（globalConfig）
 
-- 类型：`GlobalConfig`
-- 默认值：`null`
+- タイプ：`GlobalConfig`
+- デフォルト値：`null`
 
-全局策略配置提供了一些全局的设置，如作者信息、生成路径等。
+グローバル戦略設定は、作者情報や生成パスなど、いくつかのグローバル設定を提供します。
 
-**示例配置：**
+**設定例：**
 
 ```java
 GlobalConfig globalConfig = new GlobalConfig();
-globalConfig.setOutputDir("src/main/java") // 设置生成代码的输出目录
-    .setAuthor("Your Name") // 设置作者信息
-    .setOpen(false) // 设置生成后是否自动打开目录
-    .setFileOverride(true); // 设置文件存在时是否覆盖
+globalConfig.setOutputDir("src/main/java") // 生成されるコードの出力ディレクトリを設定
+    .setAuthor("Your Name") // 作者情報を設定
+    .setOpen(false) // 生成後にディレクトリを自動的に開くかどうかを設定
+    .setFileOverride(true); // ファイルが存在する場合に上書きするかどうかを設定
 ```
 
-### 注入配置（injectionConfig）
+### インジェクション設定（injectionConfig）
 
-- 类型：`InjectionConfig`
-- 默认值：`null`
+- タイプ：`InjectionConfig`
+- デフォルト値：`null`
 
-注入配置允许注入自定义参数等操作以实现个性化操作。通过注入配置，可以在代码生成过程中添加额外的逻辑。
+インジェクション設定では、カスタムパラメータのインジェクションなどの操作を許可し、個別の操作を実現できます。インジェクション設定を通じて、コード生成プロセス中に追加のロジックを加えることができます。
 
-**示例配置：**
+**設定例：**
 
 ```java
 InjectionConfig injectionConfig = new InjectionConfig() {
-    // 自定义注入参数
+    // カスタムインジェクションパラメータ
     @Override
     public void initMap() {
-        // to do nothing
+        // 何もしない
     }
 
-    // 自定义参数
+    // カスタムパラメータ
     @Override
     public MappedStatement injectMappedStatement(MappedStatement ms, Configuration configuration, SqlSource sqlSource, String mapperId) {
-        // 自定义注入逻辑
+        // カスタムインジェクションロジック
         return ms;
     }
 };
 ```
 
-通过以上配置，MyBatis-Plus 代码生成器可以根据你的需求生成符合项目结构的代码，大大提高了开发效率。记得根据实际项目需求调整配置参数，以达到最佳的代码生成效果。
+上記の設定を通じて、MyBatis-Plus コードジェネレータは、要件に基づいてプロジェクト構造に合ったコードを生成し、開発効率を大幅に向上させることができます。実際のプロジェクトの要件に合わせて設定パラメータを調整し、最適なコード生成効果を達成することを忘れないでください。
 
 
-## 数据源配置（dataSource）详解
+## データソース設定（dataSource）詳細
 
-数据源配置是 MyBatis-Plus 代码生成器的关键部分，它定义了如何连接到数据库以及如何查询数据库信息。以下是数据源配置的详细说明和示例。
+データソース設定は MyBatis-Plus コードジェネレータの重要な部分であり、データベースへの接続方法およびデータベース情報のクエリ方法を定義します。以下はデータソース設定の詳細な説明と例です。
 
 ### dbQuery
 
-- **描述**：数据库信息查询类，用于执行数据库查询操作。
-- **默认实现**：根据 `dbType` 自动选择对应数据库的内置实现。
-- **自定义**：可以实现 `IDbQuery` 接口来自定义数据库查询 SQL 语句，以返回特定内容。
+- **説明**：データベース情報クエリクラスで、データベースクエリ操作を実行するために使用されます。
+- **デフォルト実装**：`dbType` に基づいて、対応するデータベースの組み込み実装が自動的に選択されます。
+- **カスタマイズ**：`IDbQuery` インターフェースを実装して、データベースクエリ SQL ステートメントをカスタマイズし、特定の内容を返すことができます。
 
 ### dbType
 
-- **描述**：数据库类型，是必须配置的选项。
-- **内置支持**：MyBatis-Plus 内置了多种常用数据库类型，如 MySQL、Oracle、PostgreSQL 等。
+- **説明**：データベースタイプで、必須の設定オプションです。
+- **組み込みサポート**：MyBatis-Plus は MySQL、Oracle、PostgreSQL など、多くの一般的なデータベースタイプを組み込みでサポートしています。
 
 ### schemaName
 
-- **描述**：数据库 schema name，某些数据库系统（如 PostgreSQL）需要指定。
-- **示例**：在 PostgreSQL 中，可以指定为 `public`。
+- **説明**：データベースのスキーマ名で、PostgreSQL など一部のデータベースシステムでは指定が必要です。
+- **例**：PostgreSQL では、`public` と指定できます。
 
 ### typeConvert
 
-- **描述**：类型转换，用于将数据库字段类型转换为 Java 类型。
-- **默认实现**：根据 `dbType` 自动选择对应数据库的内置实现。
-- **自定义**：如果内置转换类型不满足需求，可以实现 `ITypeConvert` 接口来自定义数据库字段类型到 Java 类型的转换，或者实现 `IColumnType` 接口进行更高级的自定义。
+- **説明**：タイプ変換で、データベースのフィールドタイプを Java タイプに変換するために使用されます。
+- **デフォルト実装**：`dbType` に基づいて、対応するデータベースの組み込み実装が自動的に選択されます。
+- **カスタマイズ**：組み込みの変換タイプが要件を満たさない場合は、`ITypeConvert` インターフェースを実装してデータベースフィールドタイプから Java タイプへの変換をカスタマイズするか、`IColumnType` インターフェースを実装し、より高度なカスタマイズを行うことができます。
 
 ### url
 
-- **描述**：数据库连接的 URL，包含了连接到数据库所需的所有信息。
+- **説明**：データベース接続の URL。データベースへの接続に必要なすべての情報が含まれています。
 
 ### driverName
 
-- **描述**：数据库驱动程序的名称，用于建立数据库连接。
+- **説明**：データベースドライバークラス名で、データベース接続を確立するために使用されます。
 
 ### username
 
-- **描述**：数据库连接的用户名，用于身份验证。
+- **説明**：データベース接続のユーザー名で、認証のために使用されます。
 
 ### password
 
-- **描述**：数据库连接的密码，用于身份验证。
+- **説明**：データベース接続のパスワードで、認証のために使用されます。
 
-### 示例配置
+### 設定例
 
 ```java
 DataSourceConfig dataSourceConfig = new DataSourceConfig();
-dataSourceConfig.setDbType(DbType.MYSQL) // 设置数据库类型为 MySQL
-    .setUrl("jdbc:mysql://localhost:3306/mybatis_plus?useSSL=false&serverTimezone=UTC") // 设置数据库连接 URL
-    .setUsername("root") // 设置数据库用户名
-    .setPassword("password") // 设置数据库密码
-    .setDriverName("com.mysql.cj.jdbc.Driver"); // 设置数据库驱动名称
+dataSourceConfig.setDbType(DbType.MYSQL) // データベースタイプを MySQL に設定
+    .setUrl("jdbc:mysql://localhost:3306/mybatis_plus?useSSL=false&serverTimezone=UTC") // データベース接続 URLを設定
+    .setUsername("root") // データベースユーザー名を設定
+    .setPassword("password") // データベースパスワードを設定
+    .setDriverName("com.mysql.cj.jdbc.Driver"); // データベースドライバークラス名を設定
 ```
 
-在这个示例中，我们配置了一个 MySQL 数据库的数据源。我们指定了数据库类型、连接 URL、用户名、密码和驱动名称。这些信息将用于建立与数据库的连接，并从中获取表结构信息，以便生成相应的 Java 代码。
+この例では、MySQL データベースのデータソースを設定しています。データベースタイプ、接続 URL、ユーザー名、パスワード、およびドライバークラス名を指定しています。これらの情報は、データベースに接続し、テーブル構造情報を取得し、対応する Java コードを生成するために使用されます。
 
-请根据你的实际数据库配置调整这些参数，确保它们与你的数据库环境相匹配。
+実際のデータベース設定に応じてこれらのパラメータを調整し、データベース環境に適合させてください。
 
 
-## 数据库表配置（strategy）详解
+## データベーステーブル設定（strategy）詳細
 
-数据库表配置用于定义生成代码时如何处理数据库表和字段。通过策略配置，可以指定生成哪些表的代码、如何命名实体类和字段、以及是否包含特定的注解或属性。
+データベーステーブル設定は、コード生成時にデータベーステーブルとフィールドをどのように処理するかを定義するために使用されます。戦略設定を通じて、対象とするテーブル、エンティティクラスやフィールドの命名方法、特定のアノテーションやプロパティを含めるかどうかを指定できます。
 
 ### isCapitalMode
 
-- **描述**：是否使用大写命名模式。
-- **默认值**：`false`
+- **説明**：大文字命名モードを使用するかどうか。
+- **デフォルト値**：`false`
 
 ### skipView
 
-- **描述**：是否跳过视图。
-- **默认值**：`false`
+- **説明**：ビューをスキップするかどうか。
+- **デフォルト値**：`false`
 
 ### naming
 
-- **描述**：数据库表映射到实体的命名策略。
-- **默认值**：使用下划线转驼峰命名。
+- **説明**：データベーステーブルからエンティティへのマッピング命名戦略。
+- **デフォルト値**：スネークケースをキャメルケースに変換する。
 
 ### columnNaming
 
-- **描述**：数据库表字段映射到实体的命名策略。
-- **默认值**：未指定时，按照 `naming` 策略执行。
+- **説明**：データベーステーブルからエンティティへのマッピング命名戦略。
+- **デフォルト値**：未指定時は `naming` 戦略を実行します。
 
 ### tablePrefix
 
-- **描述**：表前缀，用于过滤带有特定前缀的表。
+- **説明**：テーブルプレフィックスで、特定のプレフィックスを持つテーブルをフィルタリングするために使用されます。
 
 ### fieldPrefix
 
-- **描述**：字段前缀，用于过滤带有特定前缀的字段。
+- **説明**：フィールドプレフィックスで、特定のプレフィックスを持つフィールドをフィルタリングするために使用されます。
 
 ### superEntityClass
 
-- **描述**：自定义继承的 Entity 类全称，带包名。
+- **説明**：カスタムの継承 Entity クラスの完全修飾名で、パッケージ名を含む。
 
 ### superEntityColumns
 
-- **描述**：自定义基础的 Entity 类，公共字段。
+- **説明**：カスタムの基底 Entity クラスで、共通フィールド。
 
 ### superMapperClass
 
-- **描述**：自定义继承的 Mapper 类全称，带包名。
+- **説明**：カスタムの継承 Mapper クラスの完全修飾名で、パッケージ名を含む。
 
 ### superServiceClass
 
-- **描述**：自定义继承的 Service 类全称，带包名。
+- **説明**：カスタムの継承 Service クラスの完全修飾名で、パッケージ名を含む。
 
 ### superServiceImplClass
 
-- **描述**：自定义继承的 ServiceImpl 类全称，带包名。
+- **説明**：カスタムの継承 ServiceImpl クラスの完全修飾名で、パッケージ名を含む。
 
 ### superControllerClass
 
-- **描述**：自定义继承的 Controller 类全称，带包名。
+- **説明**：カスタムの継承 Controller クラスの完全修飾名で、パッケージ名を含む。
 
 ### enableSqlFilter <Badge text="Since 3.3.1" type="error"/>
 
-- **描述**：默认激活进行 SQL 模糊表名匹配。关闭后，`likeTable` 与 `notLikeTable` 将失效，`include` 和 `exclude` 将使用内存过滤。
-- **默认值**：`true`
-- **注意**：如果有 SQL 语法兼容性问题，请手动设置为 `false`。已知无法使用的情况包括 MyCat 中间件。更多信息请查看 [ISSUE-2102](https://github.com/baomidou/mybatis-plus/issues/2102)
+- **説明**：SQL によるテーブル名のあいまいマッチをデフォルトで有効にします。無効にすると、`likeTable` と `notLikeTable` は機能せず、`include` と `exclude` はメモリフィルタリングを使用します。
+- **デフォルト値**：`true`
+- **注意**：SQL 構文互換性の問題がある場合は手動で `false` に設定してください。既知の非対応ケースには、 MyCat ミドルウェアが含まれます。詳細は [ISSUE-2102](https://github.com/baomidou/mybatis-plus/issues/2102) を参照してください。
 
 ### include
 
-- **描述**：需要包含的表名，当 `enableSqlFilter` 为 `false` 时，允许正则表达式。
+- **説明**：含む必要があるテーブル名を指定します。`enableSqlFilter` が `false` の場合に正規表現を許可します。
 
 ### likeTable <Badge text="Since 3.3.0" type="error"/>
 
-- **描述**：模糊匹配表名，与 notLikeTable 二选一配置。
+- **説明**：テーブル名をフィルタリングするために使用されます。`likeTable` と `notLikeTable` のいずれかを設定します。
 
 ### exclude
 
-- **描述**：需要排除的表名，当 `enableSqlFilter` 为 `false` 时，允许正则表达式。
+- **説明**：除外する必要があるテーブル名を指定します。`enableSqlFilter` が `false` の場合に正規表現を許可します。
 
 ### notLikeTable <Badge text="Since 3.3.0" type="error"/>
 
-- **描述**：模糊排除表名，与 likeTable 二选一配置。
+- **説明**：テーブル名をフィルタリングするために使用されます。`likeTable` と `notLikeTable` のいずれかを設定します。
 
 ### entityColumnConstant
 
-- **描述**：【实体】是否生成字段常量。
-- **默认值**：`false`
+- **説明**：【エンティティ】フィールド定数を生成するかどうか。
+- **デフォルト値**：`false`
 
 ### ~~entityBuilderModel~~ <Badge text="@Deprecated" type="error"/>
 
-- **描述**：【实体】是否为构建者模型.
-- **默认值**：`false`
-- **注意**：自 3.3.2 开始更名为 [chainModel](#chainmodel)
+- **説明**：【エンティティ】ビルダーモデルを構築するかどうか。
+- **デフォルト値**：`false`
+- **注意**：3.3.2 から更名されました[chainModel](#chainmodel)
 
 ### chainModel <Badge text="Since 3.3.2" type="error"/>
 
-- **描述**：【实体】是否为链式模型。
-- **默认值**：`false`
-- **注意**：3.3.2 以下版本默认生成了链式模型，3.3.2 以后，默认不生成，如有需要，请开启。
+- **説明**：【エンティティ】チェーンモデルを構築するかどうか。
+- **デフォルト値**：`false`
+- **注意**：3.3.2 未満のバージョンではデフォルトでチェーンモデルが生成されます。3.3.2 以降、デフォルトでは生成されません。必要に応じて開始してください。
 
 ### entityLombokModel
 
-- **描述**：【实体】是否为 Lombok 模型。
-- **默认值**：`false`
+- **説明**：【エンティティ】Lombok モデルを使用するかどうか。
+- **デフォルト値**：`false`
 
 ### entityBooleanColumnRemoveIsPrefix
 
-- **描述**：Boolean 类型字段是否移除 is 前缀。
-- **默认值**：`false`
+- **説明**：Boolean 型フィールドの is プレフィックスを削除するかどうか。
+- **デフォルト値**：`false`
 
 ### restControllerStyle
 
-- **描述**：生成 `@RestController` 控制器。
-- **默认值**：`false`
+- **説明**：@RestController コントローラーを生成するかどうか。
+- **デフォルト値**：`false`
 
 ### controllerMappingHyphenStyle
 
-- **描述**：驼峰转连字符。
-- **默认值**：`false`
+- **説明**：キャメルケースをケバブケースに変換するかどうか。
+- **デフォルト値**：`false`
 
 ### entityTableFieldAnnotationEnable
 
-- **描述**：是否生成实体时，生成字段注解。
-- **默认值**：`false`
+- **説明**：エンティティを生成するときにフィールドアノテーションを生成するかどうか。
+- **デフォルト値**：`false`
 
 ### versionFieldName
 
-- **描述**：乐观锁属性名称。
+- **説明**：楽観ロックプロパティ名。
 
 ### logicDeleteFieldName
 
-- **描述**：逻辑删除属性名称。
+- **説明**：論理削除プロパティ名。
 
 ### tableFillList
 
-- **描述**：表填充字段。
+- **説明**：テーブルフィールド。
 
-### 示例配置
+### 設定例
 
 ```java
 StrategyConfig strategyConfig = new StrategyConfig();
-strategyConfig.setCapitalMode(true) // 使用大写命名模式
-    .setEntityLombokModel(true) // 使用 Lombok 模型
-    .setRestControllerStyle(true) // 生成 @RestController 控制器
-    .setInclude("user", "order") // 包含特定的表
-    .setExclude("user_detail") // 排除特定的表
-    .setEntityBooleanColumnRemoveIsPrefix(true) // 移除 Boolean 类型字段的 is 前缀
-    .setTablePrefix("tbl_") // 设置表前缀
-    .setControllerMappingHyphenStyle(true); // 驼峰转连字符
+strategyConfig.setCapitalMode(true) // 大文字命名モードを使用
+    .setEntityLombokModel(true) // Lombok モデルを使用
+    .setRestControllerStyle(true) // @RestController コントローラーを生成
+    .setInclude("user", "order") // 特定のテーブルを含む
+    .setExclude("user_detail") // 特定のテーブルを除外
+    .setEntityBooleanColumnRemoveIsPrefix(true) // Boolean 型フィールドの is プレフィックスを削除
+    .setTablePrefix("tbl_") // テーブルプレフィックスを設定
+    .setControllerMappingHyphenStyle(true); // キャメルケースをケバブケースに変換
 ```
 
-在这个示例中，我们配置了一个策略，指定了大写命名模式、使用 Lombok 模型、生成 REST 风格的控制器，并指定了需要包含和排除的表。我们还设置了表前缀和驼峰转连字符的控制器映射风格。
+この例では、戦略を設定し、テーブル名の大文字命名規則、Lombok モデルの使用、REST スタイルのコントローラー生成を指定しています。また、含めるテーブルと除外するテーブルも定義しています。さらに、テーブル接頭辞や、コントローラのマッピングにおけるキャメルケースからケバブケースへの変換スタイルも設定しています。
 
-请根据你的项目需求调整这些配置参数，以确保生成的代码符合你的期望。
+プロジェクトの要件に応じて、これらの設定パラメータを調整し、生成されるコードが期待どおりになるようにしてください。
 
 
-## 包名配置（packageInfo）详解
-
-包名配置用于定义生成代码的包结构，确保生成的代码放置在正确的目录中。通过配置包名，可以控制代码的组织方式，使其符合项目的架构设计。
+## パッケージ名設定（packageInfo）詳細
+パッケージ名の設定は、生成されるコードのパッケージ構成を定義するためのものです。これにより、コードが適切なディレクトリに配置されるようになります。パッケージ名を設定することで、コードの構造をプロジェクトのアーキテクチャ設計に沿った形で整理できます。
 
 ### parent
 
-- **描述**：父包名，即所有生成代码的顶级包名。
-- **默认值**：如果未设置，则需要为每个子包名指定完整的包路径。
+- **説明**：親パッケージ名で、すべての生成されたコードの最上位パッケージ名です。
+- **デフォルト値**：未設定の場合は、各サブパッケージ名に完全なパッケージパスを指定する必要があります。
 
 ### moduleName
 
-- **描述**：父包模块名，用于区分不同的模块或子系统。
+- **説明**：親パッケージモジュール名で、異なるモジュールまたはサブシステムを区別するために使用されます。
 
 ### entity
 
-- **描述**：Entity 包名，即实体类所在的包名。
+- **説明**：Entity パッケージ名で、エンティティクラスが存在するパッケージ名です。
 
 ### service
 
-- **描述**：Service 包名，即服务接口所在的包名。
+- **説明**：Service パッケージ名で、サービスインターフェースが存在するパッケージ名です。
 
 ### serviceImpl
 
-- **描述**：Service Impl 包名，即服务实现类所在的包名。
+- **説明**：Service Impl パッケージ名で、サービス実装クラスが存在するパッケージ名です。
 
 ### mapper
 
-- **描述**：Mapper 包名，即 Mapper 接口所在的包名。
+- **説明**：Mapper パッケージ名で、Mapper インターフェースが存在するパッケージ名です。
 
 ### xml
 
-- **描述**：Mapper XML 包名，即 Mapper XML 文件所在的包名。
+- **説明**：Mapper XML パッケージ名で、Mapper XML ファイルが存在するパッケージ名です。
 
 ### controller
 
-- **描述**：Controller 包名，即控制器类所在的包名。
+- **説明**：Controller パッケージ名で、コントローラークラスが存在するパッケージ名です。
 
 ### pathInfo
 
-- **描述**：路径配置信息，用于指定生成代码的物理路径。
+- **説明**：パス設定情報で、生成されたコードの物理パスを指定するために使用されます。
 
-### 示例配置
+### 設定例
 
 ```java
 PackageConfig packageConfig = new PackageConfig();
-packageConfig.setParent("com.example") // 设置父包名
-    .setModuleName("mybatisplus") // 设置父包模块名
-    .setEntity("entity") // 设置实体类所在的子包名
-    .setService("service") // 设置服务接口所在的子包名
-    .setServiceImpl("service.impl") // 设置服务实现类所在的子包名
-    .setMapper("mapper") // 设置Mapper接口所在的子包名
-    .setXml("mapper") // 设置Mapper XML文件所在的子包名
-    .setController("controller"); // 设置控制器类所在的子包名
+packageConfig.setParent("com.example") // 親パッケージ名を設定
+    .setModuleName("mybatisplus") // 親パッケージモジュール名を設定
+    .setEntity("entity") // エンティティクラスが存在するサブパッケージ名を設定
+    .setService("service") // サービスインターフェースが存在するサブパッケージ名を設定
+    .setServiceImpl("service.impl") // サービス実装クラスが存在するサブパッケージ名を設定
+    .setMapper("mapper") // Mapper インターフェースが存在するサブパッケージ名を設定
+    .setXml("mapper") // Mapper XML ファイルが存在するサブパッケージ名を設定
+    .setController("controller"); // コントローラークラスが存在するサブパッケージ名を設定
 ```
 
-在这个示例中，我们配置了一个包结构，其中父包名为 `com.example`，每个子包名都根据其功能进行了设置。例如，实体类将放置在 `com.example.mybatisplus.entity` 包中，服务接口将放置在 `com.example.mybatisplus.service` 包中，以此类推。
+このサンプルでは、`com.example` を親パッケージとして設定し、各機能に応じてサブパッケージを構成しています。たとえば、エンティティクラスは `com.example.mybatisplus.entity` に、サービスインターフェースは `com.example.mybatisplus.service` に配置されるようになっています。その他の要素も同様に、それぞれの役割に応じたパッケージに整理されます。
 
-请根据你的项目结构和组织习惯调整这些配置参数，以确保生成的代码能够正确地集成到你的项目中。
+プロジェクトの構成や組織の慣習に応じて、これらの設定パラメータを調整し、生成されたコードが正しくプロジェクトに統合されるようにしてください。
 
 
-## 模板配置（template）详解
+## テンプレート設定（template）詳細
 
-模板配置允许开发者自定义代码生成器使用的模板，以生成符合特定项目风格和需求的代码。MyBatis-Plus 代码生成器支持多种类型的模板，包括实体类、服务类、Mapper 接口、XML 映射文件和控制器类等。
+テンプレート設定を使用すると、開発者はコードジェネレータで使用するテンプレートをカスタマイズでき、プロジェクトのスタイルや要件に合ったコードを生成できます。MyBatis-Plus のコードジェネレータは、エンティティクラス、サービスクラス、Mapper インターフェース、XML マッピングファイル、コントローラクラスなど、さまざまな種類のテンプレートに対応しています。
 
 ### entity
 
-- **描述**：Java 实体类模板，用于生成 Java 实体类代码。
+- **説明**：Java エンティティクラステンプレートで、Java エンティティクラスコードを生成するために使用されます。
 
 ### entityKt
 
-- **描述**：Kotlin 实体类模板，用于生成 Kotlin 实体类代码。
+- **説明**：Kotlin エンティティクラステンプレートで、Kotlin エンティティクラスコードを生成するために使用されます。
 
 ### service
 
-- **描述**：Service 类模板，用于生成服务接口代码。
+- **説明**：Service クラステンプレートで、サービスインターフェースコードを生成するために使用されます。
 
 ### serviceImpl
 
-- **描述**：Service impl 实现类模板，用于生成服务实现类代码。
+- **説明**：Service impl 実装クラステンプレートで、サービス実装クラスコードを生成するために使用されます。
 
 ### mapper
 
-- **描述**：mapper 模板，用于生成 Mapper 接口代码。
+- **説明**：mapper テンプレートで、Mapper インターフェースコードを生成するために使用されます。
 
 ### xml
 
-- **描述**：mapper xml 模板，用于生成 Mapper XML 映射文件代码。
+- **説明**：mapper xml テンプレートで、Mapper XML マッピングファイルコードを生成するために使用されます。
 
 ### controller
 
-- **描述**：controller 控制器模板，用于生成控制器类代码。
+- **説明**：controller コントローラーテンプレートで、コントローラークラスコードを生成するために使用されます。
 
-### 示例配置
+### 設定例
 
 ```java
 TemplateConfig templateConfig = new TemplateConfig();
-templateConfig.setEntity("templates/entity.java.vm") // 设置实体类模板路径
-    .setService("templates/service.java.vm") // 设置服务类模板路径
-    .setServiceImpl("templates/serviceImpl.java.vm") // 设置服务实现类模板路径
-    .setMapper("templates/mapper.java.vm") // 设置Mapper接口模板路径
-    .setXml("templates/mapper.xml.vm") // 设置Mapper XML模板路径
-    .setController("templates/controller.java.vm"); // 设置控制器模板路径
+templateConfig.setEntity("templates/entity.java.vm") // エンティティクラステンプレートパスを設定
+    .setService("templates/service.java.vm") // Service クラステンプレートパスを設定
+    .setServiceImpl("templates/serviceImpl.java.vm") // Serviceimpl 実装クラステンプレートパスを設定
+    .setMapper("templates/mapper.java.vm") // Mapper インターフェーステンプレートパスを設定
+    .setXml("templates/mapper.xml.vm") // Mapper XML テンプレートパスを設定
+    .setController("templates/controller.java.vm"); // Controller テンプレートパスを設定
 ```
 
-在这个示例中，我们配置了不同类型的模板路径。例如，实体类模板路径设置为 `templates/entity.java.vm`，服务类模板路径设置为 `templates/service.java.vm`，以此类推。这些模板路径指向了项目中自定义的模板文件，代码生成器将使用这些模板来生成相应的代码。
+このサンプルでは、各種テンプレートのパスを設定しています。たとえば、エンティティクラスのテンプレートパスは `templates/entity.java.vm` に、サービスクラスのテンプレートパスは `templates/service.java.vm` に設定されています。これらのパスは、プロジェクト内でカスタマイズされたテンプレートファイルを指しており、コードジェネレーターはそれらのテンプレートを基に対応するコードを生成します。
 
-请确保你的模板文件路径正确，并且模板文件遵循 Velocity 或 Freemarker 等模板引擎的语法。通过自定义模板，你可以控制生成的代码的结构、注释、命名风格等，以满足项目的特定需求。
+テンプレートファイルのパスが正しく設定されていること、またテンプレートファイルが Velocity や Freemarker などのテンプレートエンジンの構文に従っていることを確認してください。テンプレートをカスタマイズすることで、生成されるコードの構造、コメント、命名規則などを自由にコントロールでき、プロジェクト固有の要件に対応できます。
 
-在实际使用中，你可能需要根据项目的具体情况调整模板配置，例如，如果你的项目使用 Kotlin 语言，则需要配置 `entityKt` 模板路径。如果你的项目不需要生成某些类型的代码（如 XML 映射文件），则可以不配置相应的模板。
+実際の使用においては、プロジェクトの具体的な要件に応じてテンプレート設定を調整する必要があります。たとえば、プロジェクトが Kotlin を使用している場合は、`entityKt` のテンプレートパスを設定する必要があります。また、XML マッピングファイルなど特定の種類のコードが不要な場合は、対応するテンプレートを設定しないことも可能です。
 
 
-## 全局策略配置（globalConfig）详解
+## グローバル戦略設定（globalConfig）詳細
 
-全局策略配置提供了一些全局的设置，如输出目录、文件覆盖、开发者信息等，以及一些高级选项，如 Kotlin 模式、Swagger2 集成、ActiveRecord 模式等。
+グローバル設定では、出力ディレクトリ、ファイルの上書き、開発者情報などの全体的な設定を行うことができます。また、Kotlin モード、Swagger2 の統合、ActiveRecord モードなどの高度なオプションも用意されています。
 
 ### outputDir
 
-- **描述**：生成文件的输出目录。
-- **默认值**：`D 盘根目录`
+- **説明**：生成されたファイルの出力ディレクトリ。
+- **デフォルト値**：`Dドライブのルート`
 
 ### fileOverride
 
-- **描述**：是否覆盖已有文件。
-- **默认值**：`false`
+- **説明**：既存のファイルを上書きするかどうか。
+- **デフォルト値**：`false`
 
 ### open
 
-- **描述**：是否在生成后自动打开输出目录。
-- **默认值**：`true`
+- **説明**：生成後に出力ディレクトリを自動的に開くかどうか。
+- **デフォルト値**：`true`
 
 ### enableCache
 
-- **描述**：是否在 XML 中添加二级缓存配置。
-- **默认值**：`false`
+- **説明**：XML にセカンダリキャッシュ設定を追加するかどうか。
+- **デフォルト値**：`false`
 
 ### author
 
-- **描述**：开发人员名称。
-- **默认值**：`null`
+- **説明**：開発者名。
+- **デフォルト値**：`null`
 
 ### kotlin
 
-- **描述**：是否开启 Kotlin 模式。
-- **默认值**：`false`
+- **説明**：Kotlin モードを有効にするかどうか。
+- **デフォルト値**：`false`
 
 ### swagger2
 
-- **描述**：是否开启 Swagger2 模式。
-- **默认值**：`false`
+- **説明**：Swagger2 モードを有効にするかどうか。
+- **デフォルト値**：`false`
 
 ### activeRecord
 
-- **描述**：是否开启 ActiveRecord 模式。
-- **默认值**：`false`
+- **説明**：ActiveRecord モードを有効にするかどうか。
+- **デフォルト値**：`false`
 
 ### baseResultMap
 
-- **描述**：是否开启 BaseResultMap。
-- **默认值**：`false`
+- **説明**：BaseResultMap を有効にするかどうか。
+- **デフォルト値**：`false`
 
 ### baseColumnList
 
-- **描述**：是否开启 baseColumnList。
-- **默认值**：`false`
+- **説明**：baseColumnList を有効にするかどうか。
+- **デフォルト値**：`false`
 
 ### dateType
 
-- **描述**：时间类型对应策略。
-- **默认值**：`TIME_PACK`
+- **説明**：時間タイプ対応戦略。
+- **デフォルト値**：`TIME_PACK`
 
 ### entityName
 
-- **描述**：实体命名方式，`%s` 为占位符。
-- **默认值**：`null`
-- **示例**：`%sEntity` 生成 `UserEntity`
+- **説明**：エンティティ命名方法で、`%s` はプレースホルダーです。
+- **デフォルト値**：`null`
+- **例**：`%sEntity` は `UserEntity` となります
 
 ### mapperName
 
-- **描述**：Mapper 命名方式，`%s` 为占位符。
-- **默认值**：`null`
-- **示例**：`%sDao` 生成 `UserDao`
+- **説明**：Mapper 命名方法で、`%s` はプレースホルダーです。
+- **デフォルト値**：`null`
+- **例**：`%sDao` は `UserDao` となります
 
 ### xmlName
 
-- **描述**：Mapper XML 命名方式，`%s` 为占位符。
-- **默认值**：`null`
-- **示例**：`%sDao` 生成 `UserDao.xml`
+- **説明**：MapperXML命名方法で、`%s`はプレースホルダーです。
+- **デフォルト値**：`null`
+- **例**：`%sDao` は `UserDao.xml` となります
 
 ### serviceName
 
-- **描述**：Service 命名方式，`%s` 为占位符。
-- **默认值**：`null`
-- **示例**：`%sBusiness` 生成 `UserBusiness`
+- **説明**：Service 命名方法で、`%s` はプレースホルダーです。
+- **デフォルト値**：`null`
+- **例**：`%sBusiness` は `UserBusiness` となります
 
 ### serviceImplName
 
-- **描述**：Service impl 命名方式，`%s` 为占位符。
-- **默认值**：`null`
-- **示例**：`%sBusinessImpl` 生成 `UserBusinessImpl`
+- **説明**：Serviceimpl命名方法で、`%s`はプレースホルダーです。
+- **デフォルト値**：`null`
+- **例**：`%sBusinessImpl` は `UserBusinessImpl` となります
 
 ### controllerName
 
-- **描述**：Controller 命名方式，`%s` 为占位符。
-- **默认值**：`null`
-- **示例**：`%sAction` 生成 `UserAction`
+- **説明**：Controller 命名方法で、`%s` はプレースホルダーです。
+- **デフォルト値**：`null`
+- **例**：`%sAction` は `UserAction` となります
 
 ### idType
 
-- **描述**：指定生成的主键的 ID 类型。
-- **默认值**：`null`
+- **説明**：生成される主キーの ID タイプを指定します。
+- **デフォルト値**：`null`
 
-### 示例配置
+### 設定例
 
 ```java
 GlobalConfig globalConfig = new GlobalConfig();
-globalConfig.setOutputDir("src/main/java") // 设置输出目录
-    .setFileOverride(true) // 允许覆盖已有文件
-    .setOpen(false) // 不自动打开输出目录
-    .setEnableCache(true) // 在XML中添加二级缓存配置
-    .setAuthor("Your Name") // 设置开发者名称
-    .setKotlin(false) // 不开启Kotlin模式
-    .setSwagger2(true) // 开启Swagger2模式
-    .setActiveRecord(false) // 不开启ActiveRecord模式
-    .setBaseResultMap(true) // 开启BaseResultMap
-    .setBaseColumnList(true) // 开启baseColumnList
-    .setDateType(DateType.TIME_PACK) // 设置时间类型对应策略
-    .setEntityName("%sEntity") // 设置实体命名方式
-    .setMapperName("%sDao") // 设置Mapper命名方式
-    .setXmlName("%sDao") // 设置Mapper XML命名方式
-    .setServiceName("%sService") // 设置Service命名方式
-    .setServiceImplName("%sServiceImpl") // 设置Service impl命名方式
-    .setControllerName("%sController") // 设置Controller命名方式
-    .setIdType(IdType.AUTO); // 设置主键ID类型为自增
+globalConfig.setOutputDir("src/main/java") // 出力ディレクトリを設定
+    .setFileOverride(true) // 既存のファイルを上書きするかどうかを設定
+    .setOpen(false) // 出力ディレクトリを自動的に開かない
+    .setEnableCache(true) // XML にセカンダリキャッシュ設定を追加
+    .setAuthor("Your Name") // 開発者名を設定
+    .setKotlin(false) // Kotlin モードを無効化
+    .setSwagger2(true) // Swagger2 モードを有効化
+    .setActiveRecord(false) // ActiveRecord モードを無効化
+    .setBaseResultMap(true) // BaseResultMap を有効化
+    .setBaseColumnList(true) // baseColumnList を有効化
+    .setDateType(DateType.TIME_PACK) // 時間タイプ対応戦略を設定
+    .setEntityName("%sEntity") // エンティティ命名方法を設定
+    .setMapperName("%sDao") // Mapper 命名方法を設定
+    .setXmlName("%sDao") // Mapper XML 命名方法を設定
+    .setServiceName("%sService") // Service 命名方法を設定
+    .setServiceImplName("%sServiceImpl") // Serviceimpl 命名方法を設定
+    .setControllerName("%sController") // Controller 命名方法を設定
+    .setIdType(IdType.AUTO); // 主キーIDタイプをオートインクリメントに設定
 ```
 
-在这个示例中，我们配置了全局策略，指定了输出目录、文件覆盖、开发者信息等，并设置了各种命名方式和主键ID类型。这些配置将影响生成的代码的结构和内容。
+この例では、グローバル戦略を設定し、出力ディレクトリ、ファイルの上書き、開発者情報などを設定し、さまざまな命名方法と主キー ID タイプを設定します。これらの設定は生成されるコードの構造と内容に影響します。
 
-请根据你的项目需求和偏好调整这些配置参数，以确保生成的代码符合你的期望。例如，如果你希望生成的实体类名以 `Entity` 结尾，可以将 `entityName` 设置为 `%sEntity`。如果你希望在生成的 XML 文件中包含二级缓存配置，可以将 `enableCache` 设置为 `true`。
+プロジェクトの要件や好みに応じて、これらの設定パラメータを調整し、生成されるコードが期待どおりになるようにしてください。たとえば、エンティティクラス名を `Entity` で終わらせたい場合は、`entityName` を `%sEntity` に設定します。生成される XML ファイルにセカンドレベルキャッシュの設定を含めたい場合は、`enableCache` を `true` に設定してください。
 
 
-## 注入配置（injectionConfig）详解
+## インジェクション設定（injectionConfig）詳細
 
-注入配置允许开发者自定义代码生成器的行为，包括自定义返回配置、自定义输出文件、自定义文件创建逻辑等。这些配置提供了灵活性，使得代码生成器能够适应更复杂的项目需求。
+インジェクション設定を使用することで、開発者はコードジェネレーターの挙動をカスタマイズできます。たとえば、カスタム返却設定、出力ファイルの指定、ファイル生成ロジックの定義などが可能です。これらの設定により、コードジェネレーターはより複雑なプロジェクト要件にも柔軟に対応できるようになります。
 
 ### map
 
-- **描述**：自定义返回配置 Map 对象，该对象可以传递到模板引擎，通过 `cfg.xxx` 引用。
-- **用途**：用于在模板中访问自定义的配置信息。
+- **説明**：カスタム返却設定 Map オブジェクトです。テンプレート内では `cfg.xxx` の形式で参照できます。
+- **用途**：テンプレートでカスタム設定情報にアクセスするために使用されます。
 
 ### fileOutConfigList
 
-- **描述**：自定义输出文件，通过配置 `FileOutConfig` 指定模板文件和输出文件，实现自定义文件生成。
-- **用途**：用于生成非标准格式的文件，或者在特定目录下生成文件。
+- **説明**：出力ファイルをカスタマイズします。`FileOutConfig` を設定することで、テンプレートファイルと出力先ファイルを指定し、カスタムファイルの生成を実現します。
+- **用途**：標準的でない形式のファイルを生成したり、特定のディレクトリにファイルを出力したりする場合に使用します。
 
 ### fileCreate
 
-- **描述**：自定义判断是否创建文件，实现 `IFileCreate` 接口。
-- **用途**：用于判断某个类是否需要覆盖创建，或者实现文件差异算法 `merge`。
+- **説明**：カスタムファイル作成判断を実現するために使用されます。`IFileCreate` インターフェースを実装します。
+- **用途**：特定のクラスのファイルを上書きするかどうかの判定、またはファイル差分アルゴリズム（`merge`）の実装に使用されます。
 
 ### initMap
 
-- **描述**：注入自定义 Map 对象，注意需要通过 `setMap` 方法放入。
-- **用途**：用于在代码生成器中注入额外的配置信息。
+- **説明**：カスタム Map オブジェクトを注入します。 `setMap` メソッドを通じて設定する必要があります。
+- **用途**：コードジェネレータに追加の設定情報を注入するために使用されます。
 
-### 示例配置
+### 設定例
 
 ```java
 InjectionConfig injectionConfig = new InjectionConfig() {
     @Override
     public void initMap() {
-        // 自定义 Map 对象，可以在模板中通过 cfg.xxx 引用
+        // カスタム Map オブジェクトを作成し、テンプレートで cfg.xxx を通して参照できるようにします
         this.setMap(new HashMap<String, Object>() {{
             put("author", "Your Name");
             put("project", "MyBatis-Plus Code Generator");
@@ -705,11 +704,11 @@ InjectionConfig injectionConfig = new InjectionConfig() {
 
     @Override
     public FileOutConfig getFileOutConfig(TableInfo tableInfo) {
-        // 自定义输出文件配置
+        // カスタムファイル出力設定を返します
         return new FileOutConfig(tableInfo.getEntityName()) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                // 自定义输出文件路径
+                // カスタムファイル出力パスを返します
                 return "src/main/java/" + tableInfo.getEntityName() + ".java";
             }
         };
@@ -717,11 +716,11 @@ InjectionConfig injectionConfig = new InjectionConfig() {
 
     @Override
     public IFileCreate getFileCreate() {
-        // 自定义文件创建逻辑
+        // カスタムファイル作成ロジックを返します
         return new IFileCreate() {
             @Override
             public boolean isCreate(File file) {
-                // 自定义判断是否创建文件的逻辑
+                // カスタムファイル作成判断ロジックを実装します
                 return !file.exists() || file.length() == 0;
             }
         };
@@ -729,10 +728,10 @@ InjectionConfig injectionConfig = new InjectionConfig() {
 };
 ```
 
-在这个示例中，我们配置了注入配置，包括自定义 Map 对象、自定义输出文件配置和自定义文件创建逻辑。
+この例では、インジェクションの設定を行い、カスタム Map オブジェクト、カスタム出力ファイル設定、カスタムファイル作成ロジックを実装します。
 
-- 在 `initMap` 方法中，我们创建了一个包含作者和项目名称的 Map 对象，这些信息可以在模板中通过 `cfg.xxx` 引用。
-- 在 `getFileOutConfig` 方法中，我们返回了一个自定义的 `FileOutConfig` 对象，指定了输出文件的路径。
-- 在 `getFileCreate` 方法中，我们返回了一个自定义的 `IFileCreate` 实现，用于判断文件是否需要创建。
+- `initMap` メソッド内では、著者名やプロジェクト名を含む Map オブジェクトを作成しており、これらの情報はテンプレート内で `cfg.xxx` の形式で参照できます。
+- `getFileOutConfig` メソッドでは、出力ファイルのパスを指定するカスタムの `FileOutConfig` オブジェクトを返します。
+- `getFileCreate` メソッドでは、ファイルの生成が必要かどうかを判断するカスタムの `IFileCreate` 実装を返します。
 
-请根据你的项目需求调整这些配置参数，以确保生成的代码符合你的期望。例如，如果你需要在模板中访问额外的配置信息，可以在 `initMap` 方法中添加这些信息。如果你需要生成特定格式的文件，可以在 `getFileOutConfig` 方法中指定相应的模板和输出路径。如果你需要自定义文件创建逻辑，可以在 `getFileCreate` 方法中实现相应的判断逻辑。
+プロジェクトの要件に応じて、これらの設定パラメータを調整し、生成されるコードが期待どおりになるようにしてください。たとえば、テンプレート内で追加の設定情報にアクセスしたい場合は、`initMap` メソッド内にその情報を追加してください。特定の形式のファイルを生成する必要がある場合は、`getFileOutConfig` メソッドで対応するテンプレートと出力パスを指定します。ファイルの生成ロジックをカスタマイズしたい場合は、`getFileCreate` メソッド内で独自の判定処理を実装してください。

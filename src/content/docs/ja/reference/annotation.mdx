@@ -133,7 +133,7 @@ public class User {
 - `IdType.AUTO`：データベースの自動インクリメント ID をプライマリキーとして使用します。
 - `IdType.NONE`：特定の生成戦略がなく、グローバル設定に IdType 関連の設定がある場合、グローバル設定に従います。
 - `IdType.INPUT`：データ挿入前に、ユーザーが自らプライマリキーの値を設定します。
-- `IdType.ASSIGN_ID`：ID を自動割り当てします。`Long`、`Integer`、`String` 型のプライマリキーに適用されます。デフォルトでは `IdentifierGenerator` の `nextId` を通じてスノーフレークアルゴリズムを使用して実装されます。<Badge text="@since 3.3.0"/>
+- `IdType.ASSIGN_ID`：ID を自動割り当てします。`Long`、`Integer`、`String` 型のプライマリキーに適用されます。デフォルトでは `IdentifierGenerator` の `nextId` を通じて Snowflake アルゴリズムを使用して実装されます。<Badge text="@since 3.3.0"/>
 - `IdType.ASSIGN_UUID`：UUID を自動割り当てします。`String` 型のプライマリキーに適用されます。デフォルトの実装は `IdentifierGenerator` の `nextUUID` メソッドです。<Badge text="@since 3.3.0"/>
 
 :::note

@@ -1,25 +1,25 @@
 ---
-title: 乐观锁插件
+title: 楽観ロックプラグイン
 sidebar:
   order: 3
 ---
 
-乐观锁是一种并发控制机制，用于确保在更新记录时，该记录未被其他事务修改。MyBatis-Plus 提供了 `OptimisticLockerInnerInterceptor` 插件，使得在应用中实现乐观锁变得简单。
+楽観ロックは、レコードを更新する際に、そのレコードが他のトランザクションによって変更されていないことを保証するための同時実行制御メカニズムです。MyBatis-Plus は `OptimisticLockerInnerInterceptor` プラグインを提供しており、アプリケーションでの楽観ロックの実装を容易にします。
 
-## 乐观锁的实现原理
+## 楽観ロックの実装原理
 
-乐观锁的实现通常包括以下步骤：
+楽観ロックの実装には通常、以下のステップが含まれます：
 
-1. 读取记录时，获取当前的版本号（version）。
-2. 在更新记录时，将这个版本号一同传递。
-3. 执行更新操作时，设置 `version = newVersion` 的条件为 `version = oldVersion`。
-4. 如果版本号不匹配，则更新失败。
+1. レコードを読み取る際に、現在のバージョン番号（version）を取得します。
+2. レコードを更新する際に、このバージョン番号も一緒に渡します。
+3. 更新操作を実行する際に、`version = newVersion` の条件を `version = oldVersion` に設定します。
+4. バージョン番号が一致しない場合、更新は失敗します。
 
-## 配置乐观锁插件
+## 楽観ロックプラグインの設定
 
-要使用乐观锁插件，需要进行两步配置：
+楽観ロックプラグインを使用するには、2つのステップで設定を行う必要があります：
 
-### 1. 配置插件
+### 1. プラグインの設定
 
 #### Spring XML 方式
 
@@ -35,11 +35,11 @@ sidebar:
 </bean>
 ```
 
-#### Spring Boot 注解方式
+#### Spring Boot アノテーション方式
 
 ```java
 @Configuration
-@MapperScan("按需修改")
+@MapperScan("必要に応じて変更")
 public class MybatisPlusConfig {
 
     @Bean
@@ -51,9 +51,9 @@ public class MybatisPlusConfig {
 }
 ```
 
-### 2. 在实体类字段上添加 `@Version` 注解
+### 2. エンティティクラスのフィールドに `@Version` アノテーションを追加
 
-在实体类中，需要在表示版本号的字段上添加 `@Version` 注解：
+エンティティクラス内で、バージョン番号を表すフィールドに `@Version` アノテーションを追加する必要があります：
 
 ```java
 import com.baomidou.mybatisplus.annotation.Version;
@@ -61,22 +61,22 @@ import com.baomidou.mybatisplus.annotation.Version;
 public class YourEntity {
     @Version
     private Integer version;
-    // 其他字段...
+    // その他のフィールド...
 }
 ```
 
-## 注意事项
+## 注意事項
 
-- 支持的数据类型包括：`int`, `Integer`, `long`, `Long`, `Date`, `Timestamp`, `LocalDateTime`。
-- 对于整数类型，`newVersion` 是 `oldVersion + 1`。
-- `newVersion` 会自动回写到实体对象中。
-- 支持内置的 `updateById(entity)` 和 `update(entity, wrapper)`, `saveOrUpdate(entity)`, `insertOrUpdate(entity) (version >=3.5.7)` 方法。
-- 自定义方法更新时如果满足内置参数的参数条件方式也会执行乐观锁逻辑，例如自定义`myUpate(entity)` 这个和 `updateById(entity)` 是等价的，会提取参数进行乐观锁填充，但更新实现需要自行处理。
-- 在 `update(entity, wrapper)` 方法中，`wrapper` 不能复用。
+- サポートされているデータ型：`int`, `Integer`, `long`, `Long`, `Date`, `Timestamp`, `LocalDateTime`。
+- 整数型の場合、`newVersion` は `oldVersion + 1` です。
+- `newVersion` は自動的にエンティティオブジェクトに書き戻されます。
+- 組み込みの `updateById(entity)`、`update(entity, wrapper)`、`saveOrUpdate(entity)`、`insertOrUpdate(entity) (version >=3.5.7)` メソッドをサポートしています。
+- カスタムメソッドで更新する場合、組み込みパラメータの条件を満たせば楽観ロックのロジックも実行されます。例えば、カスタムの `myUpate(entity)` は `updateById(entity)` と同等であり、パラメータを抽出して楽観ロックを適用しますが、更新の実装は自身で行う必要があります。
+- `update(entity, wrapper)` メソッドでは、`wrapper` は再利用できません。
 
-## 示例
+## 例
 
-以下是一个完整的 Spring Boot 配置示例：
+以下は完全な Spring Boot 設定の例です：
 
 ```java
 @Configuration
@@ -92,4 +92,4 @@ public class MybatisPlusConfig {
 }
 ```
 
-通过以上配置和实体类中的 `@Version` 注解，你就可以在 MyBatis-Plus 应用中轻松实现乐观锁，有效防止并发更新时的数据冲突。
+上記の設定とエンティティクラスの `@Version` アノテーションにより、MyBatis-Plus アプリケーションで楽観ロックを簡単に実装し、同時更新時のデータ競合を効果的に防止できます。
